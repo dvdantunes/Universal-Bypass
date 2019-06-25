@@ -755,6 +755,13 @@ if(document instanceof HTMLDocument)
 						crowdBypass()
 					}
 				})
+				// hikarinoakariost.info bypass when leaving site
+				hrefBypass(/hikarinoakariost\.info\/out/, function(){
+					ensureDomLoaded(function(){
+						// base64_decode is defined by hikarinoakari team
+						base64_decode && safelyNavigate(base64_decode(document.location.href.match(/out\/\?(.+)\/?/)[1]))
+					})
+				})
 				hrefBypass(/tetew\\.info|siherp\\.com/,()=>{
 					let a=document.querySelector("div.download-link > a[href]")
 					if(a)
