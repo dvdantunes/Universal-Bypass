@@ -5,12 +5,6 @@
 	"firstrunTitle": {
 		"message": "Köszönjük, hogy telepítetted a Universal Bypass-t!"
 	},
-	"firstrunSubtitle": {
-		"message": "Csodálatos vagy!"
-	},
-	"optionsTrackerBypass": {
-		"message": "Apimon.de-t használó trackerek kikerülése."
-	},
 	"optionsBlockIPLoggers": {
 		"message": "IP-loggerek blokkolása, ha nem kerülhetők ki."
 	},
@@ -20,9 +14,6 @@
 	"optionsUserscripts": {
 		"message": "Egyéni kikerülések"
 	},
-	"blockedTitle": {
-		"message": "A Universal Bypass megtiltotta, hogy az IP-t naplózható legyen."
-	},
 	"crowdBypassed": {
 		"message": "Talán nem kell várakoznod!"
 	},
@@ -31,5 +22,8 @@
 	},
 	"crowdBypassedIgnore": {
 		"message": "Ez helytelen?"
+	},
+	"blockedTitle": {
+		"message": "A Universal Bypass megtiltotta, hogy az IP-t naplózható legyen."
 	}
 }

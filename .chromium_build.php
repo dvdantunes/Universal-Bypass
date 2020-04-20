@@ -1,11 +1,7 @@
 <?php
-if(file_exists("Universal Bypass.zip"))
+if(is_file("Universal Bypass for Chromium-based browsers.zip"))
 {
-	unlink("Universal Bypass.zip");
-}
-if(file_exists("Universal Bypass for Firefox.zip"))
-{
-	unlink("Universal Bypass for Firefox.zip");
+	unlink("Universal Bypass for Chromium-based browsers.zip");
 }
 
 echo "Indexing...\n";
@@ -38,26 +34,23 @@ function createZip($file)
 	$zip->open($file, ZipArchive::CREATE + ZipArchive::EXCL + ZipArchive::CHECKCONS) or die("Failed to create {$file}.\n");
 	return $zip;
 }
-$build = createZip("Universal Bypass.zip");
-$firefox = createZip("Universal Bypass for Firefox.zip");
+$build = createZip("Universal Bypass for Chromium-based browsers.zip");
 foreach($index as $fn)
 {
-	if($fn == "README.md")
+	if($fn == "README.md" || $fn == "injection_script.js" || $fn == "rules.json" || $fn == "Universal Bypass for Netscape Navigator.zip")
 	{
 		continue;
 	}
 	if($fn == "manifest.json")
 	{
 		$json = json_decode(file_get_contents($fn), true);
-		unset($json["web_accessible_resources"]);
+		unset($json["browser_specific_settings"]);
 		$json["incognito"] = "split";
-		$build->addFromString($fn, json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+		$build->addFromString($fn, str_replace("    ", "\t", json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)));
 	}
 	else
 	{
 		$build->addFile($fn, $fn);
 	}
-	$firefox->addFile($fn, $fn);
 }
 $build->close();
-$firefox->close();

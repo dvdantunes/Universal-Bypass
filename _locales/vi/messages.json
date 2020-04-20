@@ -5,17 +5,41 @@
 	"firstrunTitle": {
 		"message": "Cảm ơn bạn đã cài đặt Universal Bypass!"
 	},
-	"firstrunSubtitle": {
-		"message": "Bạn thật tuyệt vời!"
-	},
 	"firstrunNoScript": {
-		"message": "Tuy nhiên, bạn dường như sử dụng NoScript hoặc tương tự, mà Universal Bypass không tương thích với."
+		"message": "Tuy nhiên, bạn dường như sử dụng NoScript hoặc tương tự, mà Universal Bypass không tương thích."
+	},
+	"version": {
+		"message": "Phiên bản"
+	},
+	"definitionsVersion": {
+		"message": "Đoạn mã có sẵn"
+	},
+	"changelog": {
+		"message": "Thay đổi"
+	},
+	"update": {
+		"message": "Kiểm tra cập nhật"
+	},
+	"updating": {
+		"message": "Đang tải các đoạn mã có sẵn..."
+	},
+	"updateYes": {
+		"message": "Đã cập nhật đoạn mã có sẵn."
+	},
+	"updateNo": {
+		"message": "Đoạn mã có sẵn đã được cập nhật."
 	},
 	"faq": {
-		"message": "Câu Hỏi Thường Gặp (FAQ)"
+		"message": "Câu hỏi thường gặp (FAQ)"
+	},
+	"bypassCounter": {
+		"message": "Universal Bypass đã bỏ qua % trang cho bạn."
+	},
+	"support": {
+		"message": "Giúp đỡ Universal Bypass."
 	},
 	"options": {
-		"message": "Tùy chỉnh"
+		"message": "Tùy chọn"
 	},
 	"optionsLink": {
 		"message": "Thay đổi tùy chọn Universal Bypass."
@@ -23,14 +47,14 @@
 	"optionsEnabled": {
 		"message": "Bật bỏ qua website."
 	},
-	"optionsTrackerBypass": {
-		"message": "Bỏ qua trackers bằng cách sử dụng Apimon.de."
+	"optionsNavigationDelay": {
+		"message": "Đưa tôi đến đích sau % giây. (Sử dụng 0 để được chuyển hướng ngay lập tức.)"
 	},
-	"optionsInstantNavigation": {
-		"message": "Lập tức dẫn tôi đến đích đến."
+	"optionsTrackerBypass": {
+		"message": "Bỏ qua trình theo dõi (như bit.ly và t.co) bằng Apimon.de."
 	},
 	"optionsInstantNavigationTrackers": {
-		"message": "Ngay lập tức đưa tôi đến đích của trình theo dõi."
+		"message": "Lập tức đưa tôi đến đích của các mã theo dõi."
 	},
 	"optionsBlockIPLoggers": {
 		"message": "Chặn IP Logger nếu nó không thể bỏ qua."
@@ -38,14 +62,38 @@
 	"optionsCrowdBypass": {
 		"message": "Gửi và lấy đích đến của rút gọn chưa thế bypass."
 	},
+	"optionsCrowdAutoOpen": {
+		"message": "Mở các điểm đến có cộng đồng đóng góp trong một tab mới sau % giây. (0 = lập tức.)"
+	},
+	"optionsCrowdAutoClose": {
+		"message": "Đóng tab chứa địa điểm có cộng đồng đóng góp sau % giây truy cập."
+	},
 	"privacyPolicy": {
 		"message": "Chính sách bảo mật"
 	},
-	"optionsUserscripts": {
-		"message": "Bypasses tùy chỉnh"
+	"contributors": {
+		"message": "Người đóng góp"
 	},
-	"optionsUserscriptsSubtitle": {
-		"message": "Sẽ thật tuyệt vời nếu bạn có thể gửi Code bỏ qua hoạt động được lên GitHub, để giúp đỡ người khác."
+	"legalBattleInfo1": {
+		"message": "Một số trang muốn kiện Universal Bypass."
+	},
+	"legalBattleInfo2": {
+		"message": "Nếu bạn yêu thích Universal Bypass, hãy cùng chúng chiến đấu."
+	},
+	"legalBattleInfo3": {
+		"message": "Nếu bạn muốn tìm hiểu thêm về vấn đề này,"
+	},
+	"legalBattleInfo4": {
+		"message": "đây là một số thông tin"
+	},
+	"legalBattleInfo5": {
+		"message": " (nội dung pháp lý bằng tiếng Đức)."
+	},
+	"optionsUserscripts": {
+		"message": "Tùy chỉnh Bypasses"
+	},
+	"optionsUserscriptsDescription": {
+		"message": "Đây là tính năng nâng cao cho nhà phát triển để tạo mã bypass các trang. Một khi đã hoàn thành, họ có thể gửi lên GitHub để được thêm vào Universal Bypass, do đó mọi người có thể sử dụng."
 	},
 	"beforeNavigate": {
 		"message": "Bạn sắp đến đích đến."
@@ -53,22 +101,70 @@
 	"beforeNavigateDestination": {
 		"message": "Điểm đến của bạn là %"
 	},
-	"beforeNavigateInfo": {
-		"message": "Bạn có muốn Universal Bypass chuyển hướng bạn đến đích đến của bạn ngay lập tức?"
+	"beforeNavigateUnsafe": {
+		"message": "Tuy nhiên, nếu bạn chọn chuyển hướng ngay bây giờ, trang web sẽ phát hiện được Universal Bypass."
+	},
+	"beforeNavigateUnsafeTimer": {
+		"message": "Bạn sẽ không còn bị phát hiện sau % giây."
+	},
+	"beforeNavigateUnsafeTimerSingular": {
+		"message": "Bạn sẽ không còn bị phát hiện sau 1 giây."
+	},
+	"beforeNavigateTimer": {
+		"message": "Bạn sẽ được điều hướng trong % giây."
+	},
+	"beforeNavigateTimerSingular": {
+		"message": "Bạn sẽ được chuyển hướng tự động trong 1 giây."
+	},
+	"beforeNavigateOptions": {
+		"message": "Bạn có muốn điều hướng nhanh hoặc trong x giây?"
+	},
+	"beforeNavigateInstant": {
+		"message": "Bạn đang được điều hướng đến %"
+	},
+	"infoFileHoster": {
+		"message": "Thật không may, máy chủ tải về bắt buộc bạn phải chờ trước khi cho phép bạn tải tệp về."
+	},
+	"infoOutdated": {
+		"message": "Trang web này được bỏ qua với phiên bản mới của Universal Bypass"
+	},
+	"crowdWait": {
+		"message": "Thật không may, bạn là người đầu tiên gặp phải liên kết này, nhưng sau khi bạn chờ đợi, những người dùng Universal Bypass khác sẽ không còn phải làm như vậy nữa."
+	},
+	"crowdDisabled": {
+		"message": "Trang web này được bỏ qua bởi cộng đồng, mà bạn đã vô hiệu hóa trong tùy chọn."
+	},
+	"crowdBypassed": {
+		"message": "Bạn không cần phải đợi!"
+	},
+	"crowdBypassedInfo": {
+		"message": "Người dùng Universal Bypass đã từng chờ như bạn và phản hồi rằng liên liên kết này sẽ dẫn đến %"
+	},
+	"crowdBypassedTimer": {
+		"message": "Sẽ được mở trong tab mới sau % giây."
+	},
+	"crowdBypassedTimerSingular": {
+		"message": "Sẽ được mở trong tab mới sau 1 giây."
+	},
+	"crowdCloseTimer": {
+		"message": "Tab này sẽ đóng lại sau % giây."
+	},
+	"crowdCloseTimerSingular": {
+		"message": "Tab này sẽ đóng lại sau 1 giây."
+	},
+	"cancel": {
+		"message": "Huỷ bỏ."
+	},
+	"crowdBypassedIgnore": {
+		"message": "Điều này chưa chính xác ư?"
+	},
+	"crowdBypassedOptions": {
+		"message": "Bạn có muốn mở trang web trong tab mới ngay bây giờ hay trong x giây?"
 	},
 	"blockedTitle": {
 		"message": "Universal Bypass đã ngăn chặn IP của bạn bị ghi lại."
 	},
 	"blockedSubtitle": {
 		"message": "Không muốn Universal Bypass ngăn kẻ xấu lấy được IP của bạn?"
-	},
-	"crowdBypassed": {
-		"message": "Bạn không cần phải đợi!"
-	},
-	"crowdBypassedInfo": {
-		"message": "Người dùng Universal Bypass khác hiện đang chờ bạn và được báo cáo rằng điều này dẫn đến %"
-	},
-	"crowdBypassedIgnore": {
-		"message": "Điều này chưa chính xác?"
 	}
 }

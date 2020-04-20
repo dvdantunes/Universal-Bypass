@@ -1,7 +1,6 @@
 {
 	"manifest_version": 2,
 	"icons": {
-		"40": "icon/40.png",
 		"48": "icon/48.png",
 		"128": "icon/128.png",
 		"150": "icon/150.png",
@@ -12,9 +11,10 @@
 	"name": "Universal Bypass",
 	"description": "__MSG_appDesc__",
 	"homepage_url": "https://universal-bypass.org/",
-	"version": "10.33",
-	"author": "Tim \"timmyRS\" Speckhals",
+	"version": "13.11.0",
+	"author": "Sainan.de",
 	"permissions": [
+		"alarms",
 		"storage",
 		"webRequest",
 		"webRequestBlocking",
@@ -26,30 +26,43 @@
 	},
 	"browser_action": {
 		"default_icon": {
-			"40": "icon/40.png",
 			"48": "icon/48.png",
 			"128": "icon/128.png",
 			"150": "icon/150.png",
 			"176": "icon/176.png",
 			"512": "icon/512.png"
 		},
-		"default_popup": "html/options.html"
+		"default_popup": "html/popup.html"
 	},
 	"background": {
-		"scripts": ["background.js"]
+		"scripts": [
+			"background.js"
+		]
 	},
 	"content_scripts": [
 		{
-			"matches": ["<all_urls>"],
-			"js": ["content_script.js"],
+			"matches": [
+				"<all_urls>"
+			],
+			"js": [
+				"content_script.js"
+			],
 			"run_at": "document_start"
 		}
 	],
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "{8f4fa810-9c36-4b81-8e72-de97c8f29d67}",
+			"update_url": "https://universal-bypass.org/firefox/updates.json"
+		}
+	},
 	"web_accessible_resources": [
 		"html/before-navigate.html",
 		"html/blocked.html",
 		"html/crowd-bypassed.html",
 		"html/firstrun.html",
-		"html/firstrun-noscript.html"
+		"html/firstrun-noscript.html",
+		"html/options.html",
+		"icon/48.png"
 	]
 }

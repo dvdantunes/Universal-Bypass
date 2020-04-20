@@ -3,49 +3,97 @@
 		"message": "Jangan habiskan waktu anda dengan menaati aturan. Universal Bypass secara otomatis akan melompati link pemendek yang menyebalkan."
 	},
 	"firstrunTitle": {
-		"message": "Terima kasih anda sudah menginstal Universal Bypass!"
-	},
-	"firstrunSubtitle": {
-		"message": "Anda luar biasa!"
+		"message": "Terima kasih anda telah memasang Universal Bypass!"
 	},
 	"firstrunNoScript": {
-		"message": "Akan tetapi, anda sepertinya menggunakan NoScript atau menyerupai itu, Karena itu Universal Bypass tidak kompatibel dengannya."
+		"message": "Akan tetapi, anda sepertinya menggunakan ekstensi NoScript atau yang menyerupai itu, karena itu Universal Bypass tidak kompatibel dengannya."
+	},
+	"version": {
+		"message": "Versi"
+	},
+	"definitionsVersion": {
+		"message": "Definisi Bypass"
+	},
+	"changelog": {
+		"message": "Catatan perubahan"
+	},
+	"update": {
+		"message": "Periksa pembaruan"
+	},
+	"updating": {
+		"message": "Mengunduh definisi bypass..."
+	},
+	"updateYes": {
+		"message": "Berhasil mengunduh definisi bypass."
+	},
+	"updateNo": {
+		"message": "Definisi bypassnya sudah paling terbaru."
 	},
 	"faq": {
-		"message": "Pertanyaan yang Sering Diajukan\n(FAQ)"
+		"message": "Pertanyaan yang Sering Diajukan (FAQ)"
+	},
+	"bypassCounter": {
+		"message": "Universal Bypass sudah membypass % situs untuk anda."
+	},
+	"support": {
+		"message": "Berkontribusi untuk Universal Bypass."
 	},
 	"options": {
-		"message": "Pilihan"
+		"message": "Pengaturan"
 	},
 	"optionsLink": {
 		"message": "Ganti pengaturan Universal Bypass."
 	},
 	"optionsEnabled": {
-		"message": "Aktifkan bypass website."
+		"message": "Aktifkan bypass situs web."
+	},
+	"optionsNavigationDelay": {
+		"message": "Arahkan ke halaman tujuan setelah % detik."
 	},
 	"optionsTrackerBypass": {
-		"message": "Pelacak Bypass menggunakan Apimon.de."
-	},
-	"optionsInstantNavigation": {
-		"message": "Langsung arahkan ke halaman tujuan."
+		"message": "Bypass pelacak (seperti bit.ly dan t.co) menggunakan Apimon.de."
 	},
 	"optionsInstantNavigationTrackers": {
 		"message": "Langsung arahkan ke halaman tujuan pelacak."
 	},
 	"optionsBlockIPLoggers": {
-		"message": "Memblokir IP Logger jika tidak dapat dilewati."
+		"message": "Blokir IP logger jika tidak dapat dilewati."
 	},
 	"optionsCrowdBypass": {
-		"message": "Memberikan dan mendapatkan tujuan dari pemendek yang tidak dapat dilewati."
+		"message": "Memberi dan mendapatkan tujuan dari pemendek link yang tidak dapat dibypass. (Crowd Bypass)"
+	},
+	"optionsCrowdAutoOpen": {
+		"message": "Buka halaman tujuan crowd bypass di tab baru setelah % detik."
+	},
+	"optionsCrowdAutoClose": {
+		"message": "Tutup tab yang memuat halaman tujuan crowd bypass setelah % detik mengunjunginya."
 	},
 	"privacyPolicy": {
-		"message": "Kebijakan Pribadi"
+		"message": "Kebijakan Privasi"
+	},
+	"contributors": {
+		"message": "Kontributor"
+	},
+	"legalBattleInfo1": {
+		"message": "Linkvertise ingin menggugat Universal Bypass."
+	},
+	"legalBattleInfo2": {
+		"message": "Jika anda menyukai ekstensi ini, bantu saya berjuang melawan dengan baik."
+	},
+	"legalBattleInfo3": {
+		"message": "Jika anda ingin mempelajari lebih lanjut tentang hal ini,"
+	},
+	"legalBattleInfo4": {
+		"message": "berikut adalah beberapa informasi lebih lanjut"
+	},
+	"legalBattleInfo5": {
+		"message": "(dokumen hukumnya dalam bahasa Jerman)."
 	},
 	"optionsUserscripts": {
-		"message": "Atur Bypass sesuai keinginan"
+		"message": "Kustom Bypass"
 	},
-	"optionsUserscriptsSubtitle": {
-		"message": "Akan lebih baik jika Anda bisa mengirimkan bypass karya anda lewat GitHub, sehingga orang lain dapat memperoleh manfaatnya."
+	"optionsUserscriptsDescription": {
+		"message": "Ini adalah fitur khusus bagi para pengembang untuk membuat skrip sendiri untuk mem-bypass situs. Setelah disempurnakan, dapat diajukan di GitHub untuk ditambahkan ke Universal Bypass, sehingga bypass tersebut tersedia untuk semua orang."
 	},
 	"beforeNavigate": {
 		"message": "Anda hampir sampai pada tujuan anda."
@@ -53,22 +101,70 @@
 	"beforeNavigateDestination": {
 		"message": "Tujuan anda adalah %"
 	},
-	"beforeNavigateInfo": {
-		"message": "Apakah Anda ingin Universal Bypass langsung mengarahkan ke tujuan Anda?"
+	"beforeNavigateUnsafe": {
+		"message": "Namun, jika anda melewati secara langsung sekarang, mereka akan mendeteksi Universal Bypass."
 	},
-	"blockedTitle": {
-		"message": "Universal Bypass mencegah IP Anda saat sedang login."
+	"beforeNavigateUnsafeTimer": {
+		"message": "Anda tidak akan lagi terdeteksi dalam % detik."
 	},
-	"blockedSubtitle": {
-		"message": "Tidak ingin Universal Bypass untuk mencegah situs buruk dari mendapatkan IP Anda?"
+	"beforeNavigateUnsafeTimerSingular": {
+		"message": "Anda tidak akan lagi terdeteksi dalam 1 detik."
+	},
+	"beforeNavigateTimer": {
+		"message": "Anda akan dialihkan secara otomatis dalam % detik."
+	},
+	"beforeNavigateTimerSingular": {
+		"message": "Anda akan dialihkan secara otomatis dalam 1 detik."
+	},
+	"beforeNavigateOptions": {
+		"message": "Apakah anda ingin dialihkan secara langsung atau dalam x detik?"
+	},
+	"beforeNavigateInstant": {
+		"message": "Anda sedang diarahkan ke %"
+	},
+	"infoFileHoster": {
+		"message": "Sayangnya, server unduhan nya akan memastikan bahwa anda telah menunggu sebelum mengizinkan anda untuk mengunduh file."
+	},
+	"infoOutdated": {
+		"message": "Situs web ini telah ter-bypass oleh versi yang paling baru dari Universal Bypass."
+	},
+	"crowdWait": {
+		"message": "Sayangnya, anda adalah orang yang pertama kali mengakses tautan ini, akan tetapi setelah anda melewatinya, pengguna Universal Bypass lainnya tidak perlu lagi melakukannya."
+	},
+	"crowdDisabled": {
+		"message": "Situs web ini telah ter-bypass oleh fitur crowd bypass, yang mana telah anda nonaktifkan fiturnya didalam pilihan pengaturan."
 	},
 	"crowdBypassed": {
-		"message": "Anda mungkin tidak perlu menunggu !"
+		"message": "Anda mungkin tidak perlu melewati!"
 	},
 	"crowdBypassedInfo": {
-		"message": "Pengguna Universal Bypass lainnya sudah menunggu untuk anda dan melaporkan bahwa hal ini menyebabkan %"
+		"message": "Pengguna Universal Bypass lainnya sudah melewatinya untuk anda dan melaporkan bahwa tautan ini menuju ke %"
+	},
+	"crowdBypassedTimer": {
+		"message": "Ini akan dibuka di tab baru dalam % detik."
+	},
+	"crowdBypassedTimerSingular": {
+		"message": "Ini akan dibuka di tab baru dalam 1 detik."
+	},
+	"crowdCloseTimer": {
+		"message": "Tab ini akan ditutup dalam % detik."
+	},
+	"crowdCloseTimerSingular": {
+		"message": "Tab ini akan ditutup dalam 1 detik."
+	},
+	"cancel": {
+		"message": "Batalkan."
 	},
 	"crowdBypassedIgnore": {
-		"message": "Apakah ini tidak benar ?"
+		"message": "Apakah ini tidak benar?"
+	},
+	"crowdBypassedOptions": {
+		"message": "Apakah anda ingin ini dibuka di tab baru secara langsung atau dalam x detik?"
+	},
+	"blockedTitle": {
+		"message": "Universal Bypass mencegah IP anda supaya tidak terlog."
+	},
+	"blockedSubtitle": {
+		"message": "Tidak ingin Universal Bypass untuk mencegah bad actors (Peretas) dari mendapatkan IP Anda?"
 	}
 }

@@ -5,9 +5,6 @@
 	"firstrunTitle": {
 		"message": ".با تشکر برای نصب میان بر جهانی"
 	},
-	"firstrunSubtitle": {
-		"message": "!تو فوق العاده هستی"
-	},
 	"firstrunNoScript": {
 		"message": ".به نظر می رسد شما از نو اسکریپت یا مشابه آن استفاده می کنید که با میان بر جهانی سازگار نیست"
 	},
@@ -19,12 +16,6 @@
 	},
 	"optionsEnabled": {
 		"message": ".میان بر های وب سایت را فعال سازید"
-	},
-	"optionsTrackerBypass": {
-		"message": " Apimon.de ردیاب ها را میان بر بزن با استفاده از"
-	},
-	"optionsInstantNavigation": {
-		"message": ".مستقیما من را به مقاصد برسانید"
 	},
 	"optionsBlockIPLoggers": {
 		"message": ".آی پی ورودگر ها که قابل به رد شدن نیستند را مسدود کن"
@@ -38,23 +29,11 @@
 	"optionsUserscripts": {
 		"message": ".میان بر های سفارشی"
 	},
-	"optionsUserscriptsSubtitle": {
-		"message": ".خوب می شد اگر تو می توانستی میان بر های کار کننده را به گیت هاب ارسال کنی تا دیگران هم از آن سود ببرند"
-	},
 	"beforeNavigate": {
 		"message": ".شما تقریبا به مقصدتان رسیده اید"
 	},
 	"beforeNavigateDestination": {
 		"message": ".مقصد شما % است"
-	},
-	"beforeNavigateInfo": {
-		"message": "آیا شما می خواهید تا میان بر جهانی مستقیما شما را به مقصدتان هدایت کند؟"
-	},
-	"blockedTitle": {
-		"message": ".میان بر جهانی مانع از وارد شدن آی پی شما شده است"
-	},
-	"blockedSubtitle": {
-		"message": "یا شما نمی خواهید تا میان بر جهانی مانع از گرفته شدن آی پی شما توسط فعالان نادرست شود؟"
 	},
 	"crowdBypassed": {
 		"message": "!ممکن است شما مجبور به صبر کردن نباشید"
@@ -64,5 +43,11 @@
 	},
 	"crowdBypassedIgnore": {
 		"message": "آیا این نادرست است؟"
+	},
+	"blockedTitle": {
+		"message": ".میان بر جهانی مانع از وارد شدن آی پی شما شده است"
+	},
+	"blockedSubtitle": {
+		"message": "یا شما نمی خواهید تا میان بر جهانی مانع از گرفته شدن آی پی شما توسط فعالان نادرست شود؟"
 	}
 }

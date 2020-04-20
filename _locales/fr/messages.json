@@ -1,18 +1,42 @@
 {
 	"appDesc": {
-		"message": "Ne perdez pas votre temps avec la conformité. Universal Bypass saute automatiquement les raccourcisseurs de liens ennuyeux."
+		"message": "Ne perdez pas votre temps avec la conformité. Universal Bypass contourne automatiquement les raccourcisseurs de liens ennuyeux."
 	},
 	"firstrunTitle": {
-		"message": "Merci d'avoir installer Universal Bypass!"
-	},
-	"firstrunSubtitle": {
-		"message": "Vous êtes incroyable!"
+		"message": "Merci d'avoir installé Universal Bypass !"
 	},
 	"firstrunNoScript": {
-		"message": "Cependant, vous semblez utiliser NoScript ou quelque chose de similaire, avec lequel Universal Bypass n'est pas compatible."
+		"message": "Cependant, il semble que vous utilisiez le module NoScript ou quelque chose de similaire, avec lequel Universal Bypass n'est pas compatible."
+	},
+	"version": {
+		"message": "Version"
+	},
+	"definitionsVersion": {
+		"message": "Définitions de contournement"
+	},
+	"changelog": {
+		"message": "Journal des modifications"
+	},
+	"update": {
+		"message": "Vérifier les mises à jour"
+	},
+	"updating": {
+		"message": "Téléchargement des définitions de contournement en cours..."
+	},
+	"updateYes": {
+		"message": "Les définitions de contournement ont été téléchargées avec succès."
+	},
+	"updateNo": {
+		"message": "Les définitions de contournement sont à jour."
 	},
 	"faq": {
-		"message": "Questions fréquemment posées (FAQ)"
+		"message": "Foire aux questions (FAQ)"
+	},
+	"bypassCounter": {
+		"message": "Universal Bypass a déjà contourné % sites pour vous."
+	},
+	"support": {
+		"message": "Contribuer à Universal Bypass."
 	},
 	"options": {
 		"message": "Options"
@@ -23,52 +47,124 @@
 	"optionsEnabled": {
 		"message": "Activer les contournements de sites Web."
 	},
-	"optionsTrackerBypass": {
-		"message": "Contourner les traqueurs en utilisant Apimon.de."
+	"optionsNavigationDelay": {
+		"message": "Me rediriger vers les destinations après % seconde(s)."
 	},
-	"optionsInstantNavigation": {
-		"message": "M'envoyer instantanément vers les destinations."
+	"optionsTrackerBypass": {
+		"message": "Contourner les traqueurs (comme bit.ly et t.co) en utilisant Apimon.de."
 	},
 	"optionsInstantNavigationTrackers": {
-		"message": "M'envoyer instantanément vers les destinations des traqueurs."
+		"message": "Me rediriger instantanément vers les destinations des traqueurs."
 	},
 	"optionsBlockIPLoggers": {
-		"message": "Bloquer les enregistreurs d’IP si ils ne peuvent pas être contournés."
+		"message": "Bloquer les enregistreurs d'adresse IP s'ils ne peuvent pas être contournés."
 	},
 	"optionsCrowdBypass": {
-		"message": "Acquérir les cibles des raccourcisseurs non contournables."
+		"message": "Donner et obtenir les destinations des raccourcisseurs incontournables."
+	},
+	"optionsCrowdAutoOpen": {
+		"message": "Ouvrir les destinations partagées par les utilisateurs dans un nouvel onglet après % seconde(s)."
+	},
+	"optionsCrowdAutoClose": {
+		"message": "Fermer les onglets contenant une destination partagée par les utilisateurs après % seconde(s) de visite."
 	},
 	"privacyPolicy": {
-		"message": "Politique de Vie Privée"
+		"message": "Politique de confidentialité"
+	},
+	"contributors": {
+		"message": "Contributeurs"
+	},
+	"legalBattleInfo1": {
+		"message": "Linkvertise veut poursuivre en justice Universal Bypass."
+	},
+	"legalBattleInfo2": {
+		"message": "Si vous aimez cette extension, aidez-moi à mener un combat juste."
+	},
+	"legalBattleInfo3": {
+		"message": "Si vous souhaitez en savoir plus à ce sujet,"
+	},
+	"legalBattleInfo4": {
+		"message": "voici quelques informations supplémentaires"
+	},
+	"legalBattleInfo5": {
+		"message": " (la partie juridique est en allemand)."
 	},
 	"optionsUserscripts": {
-		"message": "Personnaliser les contournements"
+		"message": "Contournements personnalisés"
 	},
-	"optionsUserscriptsSubtitle": {
-		"message": "Ce serait bien si vous pouviez soumettre des contournements fonctionnels sur GitHub, afin que d'autres personnes puissent en bénéficier."
+	"optionsUserscriptsDescription": {
+		"message": "Il s'agit d'une fonctionnalité avancée permettant aux développeurs de créer leurs propres scripts pour contourner des sites Web. Une fois perfectionnés, ils peuvent ensuite être soumis sur GitHub pour être ajoutés à Universal Bypass, afin qu'ils soient accessibles à tous."
 	},
 	"beforeNavigate": {
-		"message": "Vous êtes presque arrivé à destination !"
+		"message": "Vous y êtes presque !"
 	},
 	"beforeNavigateDestination": {
 		"message": "Votre destination est %"
 	},
-	"beforeNavigateInfo": {
-		"message": "Voulez-vous que Universal Bypass vous redirige automatiquement vers votre destination ?"
+	"beforeNavigateUnsafe": {
+		"message": "Cependant, si vous naviguez maintenant, ils détecteront Universal Bypass."
 	},
-	"blockedTitle": {
-		"message": "Universal Bypass a empêché l’enregistrement de votre adresse IP."
+	"beforeNavigateUnsafeTimer": {
+		"message": "Vous ne serez plus détecté dans % secondes."
 	},
-	"blockedSubtitle": {
-		"message": "Vous ne souhaitez pas que Universal Bypass empêche de mauvais acteurs d'obtenir votre IP ?"
+	"beforeNavigateUnsafeTimerSingular": {
+		"message": "Vous ne serez plus détecté dans une seconde."
+	},
+	"beforeNavigateTimer": {
+		"message": "Vous serez automatiquement redirigé dans % secondes."
+	},
+	"beforeNavigateTimerSingular": {
+		"message": "Vous serez automatiquement redirigé dans 1 seconde."
+	},
+	"beforeNavigateOptions": {
+		"message": "Voulez-vous être redirigé instantanément ou après x secondes ?"
+	},
+	"beforeNavigateInstant": {
+		"message": "Vous allez être redirigé vers %"
+	},
+	"infoFileHoster": {
+		"message": "Malheureusement, le serveur de téléchargement s'assurera que vous avez bien attendu avant de vous permettre de télécharger le fichier."
+	},
+	"infoOutdated": {
+		"message": "Ce site Web est contourné par une version plus récente de Universal Bypass."
+	},
+	"crowdWait": {
+		"message": "Malheureusement, vous êtes la première personne à visiter ce lien, mais après avoir attendu, les autres utilisateurs de Universal Bypass n'auront plus à le faire."
+	},
+	"crowdDisabled": {
+		"message": "L'URL de destination de ce site Web pourrait être partagée avec d'autres utilisateurs, mais vous avez désactivé cette fonctionnalité dans les options."
 	},
 	"crowdBypassed": {
 		"message": "Vous n'aurez peut-être pas à attendre !"
 	},
 	"crowdBypassedInfo": {
-		"message": "D'autres utilisateurs de Universal Bypass vous ont déjà attendu et ont rapporté que cela mène à %"
+		"message": "D'autres utilisateurs de Universal Bypass ont déjà visité ce lien et ont indiqué que cela mène à cette adresse : %"
+	},
+	"crowdBypassedTimer": {
+		"message": "Ce lien sera ouvert dans un nouvel onglet dans % secondes."
+	},
+	"crowdBypassedTimerSingular": {
+		"message": "Ce lien sera ouvert dans un nouvel onglet dans 1 seconde."
+	},
+	"crowdCloseTimer": {
+		"message": "Cet onglet se fermera dans % secondes."
+	},
+	"crowdCloseTimerSingular": {
+		"message": "Cet onglet se fermera dans 1 seconde."
+	},
+	"cancel": {
+		"message": "Annuler."
 	},
 	"crowdBypassedIgnore": {
 		"message": "Cela n'était-il pas exact ?"
+	},
+	"crowdBypassedOptions": {
+		"message": "Voulez-vous que ce lien soit ouvert instantanément dans un nouvel onglet ou après x secondes ?"
+	},
+	"blockedTitle": {
+		"message": "Universal Bypass a empêché l’enregistrement de votre adresse IP."
+	},
+	"blockedSubtitle": {
+		"message": "Vous ne souhaitez pas que Universal Bypass empêche des personnes malveillantes d'obtenir votre adresse IP ?"
 	}
 }

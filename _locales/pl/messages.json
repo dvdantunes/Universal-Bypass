@@ -1,18 +1,42 @@
 {
 	"appDesc": {
-		"message": "Nie marnuj czasu na przestrzeganie przepisów, Uniwersalne Obejście automatycznie pomija irytujące skróty linkowe."
+		"message": "Nie marnuj czasu na przestrzeganie przepisów, Uniwersalny Bypass automatycznie pomija irytujące skróty linkowe."
 	},
 	"firstrunTitle": {
 		"message": "Dziękujemy za instalacje Uniwersalnego Obejścia!"
 	},
-	"firstrunSubtitle": {
-		"message": "Jesteś niesamowity!"
-	},
 	"firstrunNoScript": {
 		"message": "Wydaje się, że używasz „NoScript” lub czegoś podobnego co powoduje, że Uniwersalne Obejście nie jest kompatybilne."
 	},
+	"version": {
+		"message": "Wersja"
+	},
+	"definitionsVersion": {
+		"message": "Obejście definicji"
+	},
+	"changelog": {
+		"message": "Dziennik zmian"
+	},
+	"update": {
+		"message": "Sprawdź dostępność aktualizacji"
+	},
+	"updating": {
+		"message": "Pobieranie definicji Universal Bypass..."
+	},
+	"updateYes": {
+		"message": "Pomyślnie zaktualizowano skrypt wstrzyknięcia!"
+	},
+	"updateNo": {
+		"message": "Skrypt wstrzyknięcia jest już aktualny."
+	},
 	"faq": {
 		"message": "Najczęściej zadawane pytania (FAQ)"
+	},
+	"bypassCounter": {
+		"message": "Universal Bypass ominął dla ciebie % stron."
+	},
+	"support": {
+		"message": "Wspieraj Uniwersalne Obejście"
 	},
 	"options": {
 		"message": "Opcje"
@@ -23,10 +47,13 @@
 	"optionsEnabled": {
 		"message": "Włącz obejścia stron."
 	},
-	"optionsTrackerBypass": {
-		"message": "Omijaj namierzanie, używając Apimon.de."
+	"optionsNavigationDelay": {
+		"message": "Zabierz mnie do miejsc docelowych po % sekund. (Wpisz 0 aby być zabieranym od razu.))("
 	},
-	"optionsInstantNavigation": {
+	"optionsTrackerBypass": {
+		"message": "Omiń trackery (takie jak bit.ly i t.co) za pomocą Apimon.de."
+	},
+	"optionsInstantNavigationTrackers": {
 		"message": "Natychmiast zabieraj mnie do miejsc docelowych."
 	},
 	"optionsBlockIPLoggers": {
@@ -35,14 +62,23 @@
 	"optionsCrowdBypass": {
 		"message": "Podaj i wykorzystaj miejsca, do których nie można przejść."
 	},
+	"optionsCrowdAutoOpen": {
+		"message": "Otwórz crowd-sourcing w nowej karcie po % sekundach. (0 = natychmiast.)"
+	},
+	"optionsCrowdAutoClose": {
+		"message": "Zamknij zakładkę zawierająca crowd-sourcing miejsca docelowego po % sekundach jej wizyty."
+	},
 	"privacyPolicy": {
 		"message": "Polityka prywatności"
+	},
+	"contributors": {
+		"message": "Twórcy"
 	},
 	"optionsUserscripts": {
 		"message": "Niestandardowe obejścia"
 	},
-	"optionsUserscriptsSubtitle": {
-		"message": "Byłoby miło, gdybyś mógł wysyłać własne działające niestandardowe obejście na GitHub-a, więc inni mogą z nich korzystać."
+	"optionsUserscriptsDescription": {
+		"message": "Jest to zaawansowana funkcja dla programistów do tworzenia własnych skryptów, które omijają witryny. Po udoskonaleniu można je przesłać na GitHub'a i dodać do Uniwersalnego Obejścia, więc są one dostępne dla wszystkich."
 	},
 	"beforeNavigate": {
 		"message": "Jesteś prawie w miejscu docelowym."
@@ -50,14 +86,35 @@
 	"beforeNavigateDestination": {
 		"message": "Twoje miejsce docelowe jest %"
 	},
-	"beforeNavigateInfo": {
-		"message": "Czy chcesz, aby Uniwersalne Obejście natychmiast przekierowywało natychmiast do miejsca docelowego?"
+	"beforeNavigateUnsafe": {
+		"message": "على أية حال، اذا انتقلت الان، سيكتشفون استخدامك لالمتجاوز الشامل."
 	},
-	"blockedTitle": {
-		"message": "Uniwersalne obejście zapobiegło zarejestrowanie twojego IP."
+	"beforeNavigateUnsafeTimer": {
+		"message": "Nie będziesz wykrywany za % sekund."
 	},
-	"blockedSubtitle": {
-		"message": "Nie chcesz, aby Uniwersalne Obejście przeszkadzało złym aktorom uzyskanie twojego adresu IP?"
+	"beforeNavigateUnsafeTimerSingular": {
+		"message": "Nie będziesz wykrywany za 1 sekundę."
+	},
+	"beforeNavigateTimer": {
+		"message": "Zostaniesz automatycznie przekierowany za % sekund."
+	},
+	"beforeNavigateTimerSingular": {
+		"message": "Zostaniesz przekierowany automatycznie za 1 sekundę."
+	},
+	"beforeNavigateOptions": {
+		"message": "Chcesz być przekierowywany natychmiastowo, czy za x sekund?"
+	},
+	"beforeNavigateInstant": {
+		"message": "Trwa nawigacja do%"
+	},
+	"infoFileHoster": {
+		"message": "Niestety, serwer pobierania upewni się, czy czekałeś, zanim pozwoli ci pobrać ten plik."
+	},
+	"crowdWait": {
+		"message": "Niestety, jesteś pierwszym który wchodzi w ten link, ale po tym jak ty poczekałeś, inni użytkownicy Universal bypass nie będą musieli już czekać."
+	},
+	"crowdDisabled": {
+		"message": "Ta strona jest ominięta przez crowd bypass, którą masz wyłączoną w ustawieniach."
 	},
 	"crowdBypassed": {
 		"message": "Już nie musisz czekać!"
@@ -65,7 +122,31 @@
 	"crowdBypassedInfo": {
 		"message": "Inni użytkownicy Uniwersalnego obejścia czekali na ciebie i zgłosili, że prowadzi to do %"
 	},
+	"crowdBypassedTimer": {
+		"message": "To będzie otwarte w nowym oknie za % sekund."
+	},
+	"crowdBypassedTimerSingular": {
+		"message": "To będzie otwarte w nowym oknie za 1 sekundę."
+	},
+	"crowdCloseTimer": {
+		"message": "Ta karta zostanie zamknięta za % sekund."
+	},
+	"crowdCloseTimerSingular": {
+		"message": "Ta karta zostanie zamknięta za 1 sekundę."
+	},
+	"cancel": {
+		"message": "Anuluj"
+	},
 	"crowdBypassedIgnore": {
 		"message": "Czy to było nieprawidłowe?"
+	},
+	"crowdBypassedOptions": {
+		"message": "Czy chcesz to otworzyć w nowej karcie natychmiast, czy w ciągu x sekund?"
+	},
+	"blockedTitle": {
+		"message": "Uniwersalne obejście zapobiegło zarejestrowanie twojego IP."
+	},
+	"blockedSubtitle": {
+		"message": "Nie chcesz, aby Uniwersalne Obejście przeszkadzało złym aktorom uzyskanie twojego adresu IP?"
 	}
 }

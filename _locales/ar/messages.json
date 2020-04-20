@@ -5,14 +5,38 @@
 	"firstrunTitle": {
 		"message": "شكرًا لتثبيتك المتجاوز الشامل!"
 	},
-	"firstrunSubtitle": {
-		"message": "أنت رائع!"
-	},
 	"firstrunNoScript": {
 		"message": "للاسف يبدو أنك تستخدم NoScript أو احد الاضافات المماثلة التي تكون غير متوافقة مع المتجاوز الشامل."
 	},
+	"version": {
+		"message": "الإصدار"
+	},
+	"definitionsVersion": {
+		"message": "تعريفات التجاوز"
+	},
+	"changelog": {
+		"message": "سجل التغييرات"
+	},
+	"update": {
+		"message": "التحقق من وجود التحديثات"
+	},
+	"updating": {
+		"message": "تحميل تعريفات التجاوز..."
+	},
+	"updateYes": {
+		"message": "تم تحديث نص الحقن البرمجي بنجاح!"
+	},
+	"updateNo": {
+		"message": "سكريبت الحفن محدث بالفعل."
+	},
 	"faq": {
 		"message": "الأسئلة المتداولة"
+	},
+	"bypassCounter": {
+		"message": "المتجاوز الشامل قد تجاوز % مواقع لأجلك."
+	},
+	"support": {
+		"message": "ادعم المتجاوز الشامل"
 	},
 	"options": {
 		"message": "الخيارات"
@@ -23,11 +47,11 @@
 	"optionsEnabled": {
 		"message": "تمكين تجاوز مواقع الويب."
 	},
-	"optionsTrackerBypass": {
-		"message": "تجاوز المتتبعين بإستخدام Apimon.de."
+	"optionsNavigationDelay": {
+		"message": "خذنى للوجهة بعد % ثوان. (استخدم 0 للذهاب مباشرة.)"
 	},
-	"optionsInstantNavigation": {
-		"message": "قم بنقلي إلى الوجهات تلقائيًا."
+	"optionsTrackerBypass": {
+		"message": "تجاوز المتتبعات (مثل bit.ly و t.co) بإستخدام Apimon.de."
 	},
 	"optionsInstantNavigationTrackers": {
 		"message": "قم بنقلي إلى الواجهات تلقائيًا."
@@ -38,14 +62,38 @@
 	"optionsCrowdBypass": {
 		"message": "إعطاء وأخذ وجهات الروابط المختصرة الغير قابلة للتجاوز."
 	},
+	"optionsCrowdAutoOpen": {
+		"message": "فتح وجهة حشد المصادر في علامة تبويب جديدة بعد % ثوان. (0 للذهاب مباشرة.)"
+	},
+	"optionsCrowdAutoClose": {
+		"message": "إغلاق علامة التبويب التي تحتوي على مصادر الحشود للوجهة بعد زيارتها بـ % ثوان."
+	},
 	"privacyPolicy": {
 		"message": "سياسة الخصوصية"
+	},
+	"contributors": {
+		"message": "المُساهمون"
+	},
+	"legalBattleInfo1": {
+		"message": "موقع Linkvertise يريد مقاضاة المتجاوز العالمي."
+	},
+	"legalBattleInfo2": {
+		"message": "اذا كنت تحب هذه الاضافة، ساعدنا فى القتال الجيد."
+	},
+	"legalBattleInfo3": {
+		"message": "اذا كنت ترغب فى معرفة المزيد عن هذا،"
+	},
+	"legalBattleInfo4": {
+		"message": "هنا المزيد من المعلومات"
+	},
+	"legalBattleInfo5": {
+		"message": "(الأمور القانونية بالالمانية)"
 	},
 	"optionsUserscripts": {
 		"message": "عمليات التجاوز المخصصة"
 	},
-	"optionsUserscriptsSubtitle": {
-		"message": "سيكون من الرائع إذا كنت تستطيع إرسال متجاوزات تعمل إلى صفحة الـ GitHub، حتى يستطيع اﻵخرين اﻹستفادة منها."
+	"optionsUserscriptsDescription": {
+		"message": "هذه ميزة متقدمة للمطورين لانشاء كودهم الخاص لتخطى المواقع. بمجرد جهزيته، يمكنهم بعدها ارساله لجت هاب يضاف للمتخطى العالمى، لكى يصبح متاح للجميع."
 	},
 	"beforeNavigate": {
 		"message": "انت الأن قريب من وجهتك."
@@ -53,14 +101,38 @@
 	"beforeNavigateDestination": {
 		"message": "وجهتك هي %"
 	},
-	"beforeNavigateInfo": {
-		"message": "هل تريد من المتجاوز الشامل إعادة توجيهك علي الفور الي وجهتك؟"
+	"beforeNavigateUnsafe": {
+		"message": "على أية حال، اذا انتقلت الان، سيكتشفون استخدامك لالمتجاوز الشامل."
 	},
-	"blockedTitle": {
-		"message": "المتجاوز الشامل قام بمنع تسجيل عنوان الـ IP الخاص بك."
+	"beforeNavigateUnsafeTimer": {
+		"message": "لن يتم اكتشافك بعد % ثوان."
 	},
-	"blockedSubtitle": {
-		"message": "لا تريد من المتجاوز الشامل ان يمنع الجهات السيئه من الحصول علي الأي بي الخاص بك ؟"
+	"beforeNavigateUnsafeTimerSingular": {
+		"message": "لن يتم اكتشافك بعد ثانية واحدة."
+	},
+	"beforeNavigateTimer": {
+		"message": "سيتم تحويلك تلقائيا بعد % ثوان."
+	},
+	"beforeNavigateTimerSingular": {
+		"message": "سيتم تحويلك تلقائيا بعد % ثوان."
+	},
+	"beforeNavigateOptions": {
+		"message": "هل تريد ان يتم تحويلك تلقائيا او بعدد ثوانى محددة؟"
+	},
+	"beforeNavigateInstant": {
+		"message": "يتم نقلك إلى %"
+	},
+	"infoFileHoster": {
+		"message": "للأسف،إنهم يتأكدون من إنتظارك الغعلي قبل أن تتمكن من تنزيل الملف."
+	},
+	"infoOutdated": {
+		"message": "تم تجاوز هذا الموقع بواسطة إصدار أحدث من المتجاوز الشامل."
+	},
+	"crowdWait": {
+		"message": "للأسف، أنت أول شخص يواجه هذا الرابط، لكن بعد انتظارك، المستخدمين الأخرين للمتجاوز الشامل لن يضطرون للإنتظار بعدك."
+	},
+	"crowdDisabled": {
+		"message": "هذا الموقع يتم تجاوزه من خلال تجاوز الحشود، التي قمت بتعطيلها في الخيارات."
 	},
 	"crowdBypassed": {
 		"message": "ربما لن تحتاج للإنتظار بعد الأن!"
@@ -68,7 +140,31 @@
 	"crowdBypassedInfo": {
 		"message": "قام مستخدمون آخرون للمتجاوز الشامل بالإنتظار بدلاً عنك والتبليع بأن هذا الرابط يؤدي إلى %"
 	},
+	"crowdBypassedTimer": {
+		"message": "سوف يفتح في علامة تبويب جديدة بعد % ثوان."
+	},
+	"crowdBypassedTimerSingular": {
+		"message": "سوف يفتح في علامة تبويب جديدة بعد ثانية واحدة."
+	},
+	"crowdCloseTimer": {
+		"message": "علامة التبويب هذه سيتم إغلاقها بعد % ثوان."
+	},
+	"crowdCloseTimerSingular": {
+		"message": "علامة التبويب هذه سيتم إغلاقها بعد ثانية واحده."
+	},
+	"cancel": {
+		"message": "إلغاء"
+	},
 	"crowdBypassedIgnore": {
 		"message": "ليس هذا صحيحًا؟"
+	},
+	"crowdBypassedOptions": {
+		"message": "هل تريد ان يتم تحويلك تلقائيا او بعدد ثوانٍ محددة؟"
+	},
+	"blockedTitle": {
+		"message": "المتجاوز الشامل قام بمنع تسجيل عنوان الـ IP الخاص بك."
+	},
+	"blockedSubtitle": {
+		"message": "لا تريد من المتجاوز الشامل ان يمنع الجهات السيئه من الحصول علي الأي بي الخاص بك ؟"
 	}
 }

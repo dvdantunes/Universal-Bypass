@@ -5,29 +5,53 @@
 	"firstrunTitle": {
 		"message": "Obrigado por instalar o Universal Bypass!"
 	},
-	"firstrunSubtitle": {
-		"message": "Você é demais!"
-	},
 	"firstrunNoScript": {
 		"message": "No entanto, parece que você está usando o NoScript ou similar, com o qual o Universal Bypass não é compatível."
 	},
+	"version": {
+		"message": "Versão"
+	},
+	"definitionsVersion": {
+		"message": "Definições de bypasses"
+	},
+	"changelog": {
+		"message": "Histórico de alterações"
+	},
+	"update": {
+		"message": "Procurar atualizações"
+	},
+	"updating": {
+		"message": "A transferir definições de bypasses..."
+	},
+	"updateYes": {
+		"message": "Script de injeção atualizado com sucesso!"
+	},
+	"updateNo": {
+		"message": "As definições de bypasses estão atualizadas."
+	},
 	"faq": {
 		"message": "Perguntas Frequentes (FAQ)"
+	},
+	"bypassCounter": {
+		"message": "A Bypass Universal já passou por cima de % dos sites por si."
+	},
+	"support": {
+		"message": "Suporte do Universal Bypass"
 	},
 	"options": {
 		"message": "Opções"
 	},
 	"optionsLink": {
-		"message": "Altere as opções do Universal Bypass."
+		"message": "Alterar as opções do Universal Bypass."
 	},
 	"optionsEnabled": {
-		"message": "Habilite bypasses de websites."
+		"message": "Ativar bypasses de websites."
+	},
+	"optionsNavigationDelay": {
+		"message": "Leve-me para destinos após % segundo(s). (Use 0 para ser ir instantaneamente.)"
 	},
 	"optionsTrackerBypass": {
-		"message": "Ignorar rastreadores usando Apimon.de."
-	},
-	"optionsInstantNavigation": {
-		"message": "Levar-me instantaneamente aos destinos."
+		"message": "Contornar rastreadores (tais como bit.ly e t.co) usando Apimon.de."
 	},
 	"optionsInstantNavigationTrackers": {
 		"message": "Leve-me instantaneamente para destinos de rastreadores."
@@ -38,14 +62,20 @@
 	"optionsCrowdBypass": {
 		"message": "Dê e pegue o destino de encurtadores não-passáveis."
 	},
+	"optionsCrowdAutoOpen": {
+		"message": "Abrir destinos de colaboração coletiva em uma nova aba após % segundo(s). (0 = instantâneo)"
+	},
 	"privacyPolicy": {
 		"message": "Política de Privacidade"
+	},
+	"contributors": {
+		"message": "Contribuidores"
 	},
 	"optionsUserscripts": {
 		"message": "Bypasses Personalizados"
 	},
-	"optionsUserscriptsSubtitle": {
-		"message": "Seria legal se você pudesse enviar bypasses funcionais para o GitHub, para que outros se beneficiem deles."
+	"optionsUserscriptsDescription": {
+		"message": "Este é um recurso avançado para que os desenvolvedores criam seus próprios scripts para ignorar sites. Uma vez aperfeiçoados, eles podem ser enviados no GitHub para serem adicionados ao Universal Bypass, então eles estarão disponíveis para todos."
 	},
 	"beforeNavigate": {
 		"message": "Você está quase no seu destino."
@@ -53,14 +83,23 @@
 	"beforeNavigateDestination": {
 		"message": "Seu destino é %"
 	},
-	"beforeNavigateInfo": {
-		"message": "Deseja que o Universal Bypass instantaneamente redirecione você para o seu destino?"
+	"beforeNavigateTimer": {
+		"message": "Você será automaticamente redirecionado em % segundos."
 	},
-	"blockedTitle": {
-		"message": "O Universal Bypass preveniu que seu IP fosse registrado."
+	"beforeNavigateTimerSingular": {
+		"message": "Você será automaticamente redirecionado em 1 segundo."
 	},
-	"blockedSubtitle": {
-		"message": "Você quer que o Universal Bypass previna que pessoas mal intencionadas obtenham seu IP?"
+	"beforeNavigateOptions": {
+		"message": "Você quer ser redirecionado instantaneamente ou em x segundos?"
+	},
+	"infoOutdated": {
+		"message": "Este site é contornado por uma versão mais recente do Universal Bypass."
+	},
+	"crowdWait": {
+		"message": "Infelizmente, você é o(a) primeiro(a) a encontrar este link, mas após a espera, outros utilizadores Universal Bypass não terão de esperar mais."
+	},
+	"crowdDisabled": {
+		"message": "O destino deste website é partilhável através do recurso 'crowd bypass', que você desativou nas opções."
 	},
 	"crowdBypassed": {
 		"message": "Talvez você não precise esperar!"
@@ -68,7 +107,25 @@
 	"crowdBypassedInfo": {
 		"message": "Outros usuários do Universal Bypass já esperaram para você e reportaram que isto leva para %"
 	},
+	"crowdBypassedTimer": {
+		"message": "Isto vai ser aberto numa nova janela em % segundos."
+	},
+	"crowdBypassedTimerSingular": {
+		"message": "Isto vai ser aberto numa nova janela em 1 segundo."
+	},
+	"cancel": {
+		"message": "Cancelar"
+	},
 	"crowdBypassedIgnore": {
 		"message": "Isto não estava correto?"
+	},
+	"crowdBypassedOptions": {
+		"message": "Quer que isto seja aberto numa nova janela instantaneamente ou em x segundos?"
+	},
+	"blockedTitle": {
+		"message": "O Universal Bypass preveniu que seu IP fosse registrado."
+	},
+	"blockedSubtitle": {
+		"message": "Você quer que o Universal Bypass previna que pessoas mal intencionadas obtenham seu IP?"
 	}
 }

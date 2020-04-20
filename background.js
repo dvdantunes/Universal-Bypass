@@ -1,10 +1,27 @@
 const brws=(typeof browser=="undefined"?chrome:browser),
-platform=brws.runtime.getURL("").split("-")[0],
-getRedirectUrl=(url,tracker)=>(instantNavigation||(tracker&&instantNavigationTrackers)?url:brws.runtime.getURL("html/before-navigate.html")+"?target="+encodeURIComponent(url)),
-getRedirect=(url,tracker)=>({redirectUrl:getRedirectUrl(url,tracker)}),
-encodedRedirect=url=>({redirectUrl:(instantNavigation?decodeURIComponent(url):brws.runtime.getURL("html/before-navigate.html")+"?target="+url)}),
+firefox=(brws.runtime.getURL("").substr(0,4)=="moz-"),
+extension_version=brws.runtime.getManifest().version,
+definitions_version="",
+getRedirect=(url,referer,safe_in)=>{
+	if(!isGoodLink(url))
+	{
+		return
+	}
+	let redirectUrl=brws.runtime.getURL("html/before-navigate.html")+"?target="+encodeURIComponent(url)
+	if(referer)
+	{
+		redirectUrl+="&referer="+encodeURIComponent(referer)
+	}
+	if(safe_in!==undefined)
+	{
+		redirectUrl+="&safe_in="+safe_in
+	}
+	countIt()
+	return {redirectUrl}
+},
+encodedRedirect=(url,referer,safe_in)=>getRedirect(decodeURIComponent(url),referer,safe_in),
 isGoodLink=link=>{
-	if(!link||link.split("#")[0]==location.href.split("#")[0]||link.substr(0,6)=="about:"||link.substr(0,11)=="javascript:")
+	if(!link||link.substr(0,6)=="about:"||link.substr(0,11)=="javascript:")//jshint ignore:line
 	{
 		return false
 	}
@@ -17,34 +34,48 @@ isGoodLink=link=>{
 		return false
 	}
 	return true
+},
+countIt=()=>{
+	brws.storage.local.set({bypass_counter:++bypassCounter})
+	sendToOptions({bypassCounter})
+},
+resetCounter=()=>{
+	bypassCounter=0
+	brws.storage.local.set({bypass_counter:0})
+	sendToOptions({bypassCounter})
 }
 
-//Install & Uninstall Actions
+// Install handler
 brws.runtime.onInstalled.addListener(details=>{
 	if(details.reason=="install")
 	{
-		if(platform=="moz")
-		{
-			brws.windows.create({url:"https://universal-bypass.org/firstrun"})
-		}
-		else
-		{
-			window.open("https://universal-bypass.org/firstrun")
-		}
+		brws.tabs.create({url:"https://universal-bypass.org/firstrun"})
+		brws.storage.sync.set({opened_options_after_update:1})
+	}
+	else
+	{
+		brws.storage.sync.get(["opened_options_after_update"],res=>{
+			if(!res||!res.opened_options_after_update)
+			{
+				brws.tabs.create({url:brws.runtime.getURL("html/options.html")})
+				brws.storage.sync.set({opened_options_after_update:1})
+			}
+		})
 	}
 })
+
+// Uninstall handler
 brws.runtime.setUninstallURL("https://docs.google.com/forms/d/e/1FAIpQLSdXw-Yf5IaDXZWw4fDHroZkDFOF6hgWEvVDaXT9ZADqnF2reg/viewform")
 
-//Keeping track of options
-var enabled=true,trackerBypassEnabled=true,instantNavigationTrackers=false,blockIPLoggers=true,crowdEnabled=true,userscript=""
-brws.storage.sync.get(["disable","no_tracker_bypass","instant_navigation","no_instant_navigation_trackers","allow_ip_loggers","crowd_bypass_opt_out"],res=>{
+// Keeping track of options
+var bypassCounter=0,enabled=true,instantNavigation=true,trackerBypassEnabled=true,instantNavigationTrackers=false,blockIPLoggers=true,crowdEnabled=true,userScript=""
+brws.storage.sync.get(["disable","navigation_delay","no_tracker_bypass","no_instant_navigation_trackers","allow_ip_loggers","crowd_bypass_opt_out","crowd_open_delay","crowd_close_delay","no_info_box"],res=>{
 	if(res)
 	{
 		enabled=(!res.disable||res.disable!=="true")
 		if(!enabled)
 		{
 			brws.browserAction.setIcon({path: {
-				"40": "icon_disabled/40.png",
 				"48": "icon_disabled/48.png",
 				"128": "icon_disabled/128.png",
 				"150": "icon_disabled/150.png",
@@ -52,17 +83,34 @@ brws.storage.sync.get(["disable","no_tracker_bypass","instant_navigation","no_in
 				"512": "icon_disabled/512.png"
 			}})
 		}
-		trackerBypassEnabled=(!res.no_tracker_bypass||res.no_tracker_bypass!=="true")
-		instantNavigation=(res.instant_navigation&&res.instant_navigation==="true")
-		instantNavigationTrackers=(!res.no_instant_navigation_trackers||res.no_instant_navigation_trackers!=="true")
-		blockIPLoggers=(!res.allow_ip_loggers||res.allow_ip_loggers!=="true")
-		crowdEnabled=(!res.crowd_bypass_opt_out||res.crowd_bypass_opt_out!=="true")
-	}
-})
-brws.storage.local.get(["userscript"],res=>{
-	if(res&&res.userscript)
-	{
-		userscript=res.userscript
+		if(res.navigation_delay)
+		{
+			instantNavigation=(res.navigation_delay==0)
+			if(res.navigation_delay==61)
+			{
+				brws.storage.sync.set({navigation_delay:-1})
+			}
+		}
+		else
+		{
+			brws.storage.sync.set({navigation_delay:0})
+		}
+		trackerBypassEnabled=(res.no_tracker_bypass!=="true")
+		instantNavigationTrackers=(res.no_instant_navigation_trackers!=="true")
+		blockIPLoggers=(res.allow_ip_loggers!=="true")
+		crowdEnabled=(res.crowd_bypass_opt_out!=="true")
+		if(!res.crowd_open_delay||res.crowd_open_delay==61)
+		{
+			brws.storage.sync.set({crowd_open_delay:-6})
+		}
+		if(!res.crowd_close_delay||res.crowd_close_delay==61)
+		{
+			brws.storage.sync.set({crowd_close_delay:-11})
+		}
+		if(res.no_info_box)
+		{
+			brws.storage.sync.remove(["no_info_box"])
+		}
 	}
 })
 brws.storage.onChanged.addListener(changes=>{
@@ -72,7 +120,6 @@ brws.storage.onChanged.addListener(changes=>{
 		if(enabled)
 		{
 			brws.browserAction.setIcon({path: {
-				"40": "icon/40.png",
 				"48": "icon/48.png",
 				"128": "icon/128.png",
 				"150": "icon/150.png",
@@ -83,7 +130,6 @@ brws.storage.onChanged.addListener(changes=>{
 		else
 		{
 			brws.browserAction.setIcon({path: {
-				"40": "icon_disabled/40.png",
 				"48": "icon_disabled/48.png",
 				"128": "icon_disabled/128.png",
 				"150": "icon_disabled/150.png",
@@ -92,13 +138,13 @@ brws.storage.onChanged.addListener(changes=>{
 			}})
 		}
 	}
+	if(changes.navigation_delay)
+	{
+		instantNavigation=(changes.navigation_delay.newValue==0)
+	}
 	if(changes.no_tracker_bypass)
 	{
 		trackerBypassEnabled=(changes.no_tracker_bypass.newValue!=="true")
-	}
-	if(changes.instant_navigation)
-	{
-		instantNavigation=(changes.instant_navigation.newValue==="true")
 	}
 	if(changes.no_instant_navigation_trackers)
 	{
@@ -114,21 +160,192 @@ brws.storage.onChanged.addListener(changes=>{
 	}
 	if(changes.userscript)
 	{
-		userscript=changes.userscript.newValue
+		userScript=changes.userscript.newValue
 	}
+	refreshInjectionScript()
 })
 
-//Messaging
+// Bypass definition management
+let updateStatus = "", injectionScript = "", preflightRules = {}, upstreamInjectionScript = "", upstreamCommit, channel = {}, optionsTab, optionsPort
+const updateBypassDefinitions = callback => {
+	if(updateStatus != "")
+	{
+		return
+	}
+	if(typeof callback != "function")
+	{
+		callback = () => {}
+	}
+	updateStatus = "checking"
+	sendToOptions({updateStatus})
+	const finishDownload = () => {
+		channel = {}
+		let uniqueness = []
+		;["stop_watching","count_it","crowd_referer","crowd_path","crowd_query","crowd_queried","crowd_contribute","adlinkfly_info","adlinkfly_target"].forEach(name => {
+			let val
+			do
+			{
+				val = Math.random().toString().substr(2)
+			}
+			while(uniqueness.indexOf(val) != -1);
+			uniqueness.push(val)
+			upstreamInjectionScript = upstreamInjectionScript.split("{{channel."+name+"}}").join(channel[name] = "data-" + val)
+		})
+		;["infoFileHoster","infoOutdated","crowdWait","crowdDisabled"].forEach(name => {
+			upstreamInjectionScript = upstreamInjectionScript.split("{{msg."+name+"}}").join(brws.i18n.getMessage(name).split("\\").join("\\\\").split("\"").join("\\\""))
+		})
+		upstreamInjectionScript = upstreamInjectionScript.split("{{icon/48.png}}").join(brws.runtime.getURL("icon/48.png"))
+		refreshInjectionScript()
+		updateStatus = ""
+		sendToOptions({upstreamCommit, updateStatus})
+	}
+	let xhr = new XMLHttpRequest()
+	xhr.onload = () => {
+		updateStatus = "updating"
+		upstreamCommit = definitions_version
+		sendToOptions({upstreamCommit, updateStatus})
+		callback(true)
+		upstreamInjectionScript = xhr.responseText
+		xhr = new XMLHttpRequest()
+		xhr.open("GET", brws.runtime.getURL("rules.json"), true)
+		xhr.onload = () => {
+			preflightRules = JSON.parse(xhr.responseText)
+			finishDownload()
+		}
+		xhr.send()
+	}
+	if(definitions_version === "")
+	{
+		// This is unreachable in Firefox because definitions_version will always be set.
+		xhr.onerror = () => {
+			let xhr = new XMLHttpRequest()
+			xhr.onload = () => {
+				const latestCommit = JSON.parse(xhr.responseText).sha
+				if(latestCommit == upstreamCommit)
+				{
+					updateStatus = ""
+					sendToOptions({updateStatus})
+					callback(false)
+				}
+				else
+				{
+					updateStatus = "updating"
+					if(upstreamCommit == "")
+					{
+						sendToOptions({upstreamCommit: latestCommit})
+					}
+					sendToOptions({updateStatus})
+					callback(true)
+					upstreamCommit = latestCommit
+					let downloads = 0
+					xhr = new XMLHttpRequest()
+					xhr.onload = () => {
+						upstreamInjectionScript = xhr.responseText
+						if(++downloads == 2)
+						{
+							finishDownload()
+						}
+					}
+					xhr.onerror = () => {
+						if(++downloads == 2)
+						{
+							finishDownload()
+						}
+					}
+					xhr.open("GET", "https://raw.githubusercontent.com/Sainan/Universal-Bypass/" + upstreamCommit + "/injection_script.js", true)
+					xhr.send()
+					let xhr2 = new XMLHttpRequest()
+					xhr2.onload = () => {
+						preflightRules = JSON.parse(xhr2.responseText)
+						if(++downloads == 2)
+						{
+							finishDownload()
+						}
+					}
+					xhr2.onerror = () => {
+						if(++downloads == 2)
+						{
+							finishDownload()
+						}
+					}
+					xhr2.open("GET", "https://raw.githubusercontent.com/Sainan/Universal-Bypass/" + upstreamCommit + "/rules.json", true)
+					xhr2.send()
+				}
+			}
+			xhr.onerror = () => {
+				updateStatus = ""
+				sendToOptions({updateStatus})
+				callback(false)
+			}
+			xhr.open("GET", "https://api.github.com/repos/Sainan/Universal-Bypass/commits/master", true)
+			xhr.send()
+		}
+	}
+	xhr.open("GET", brws.runtime.getURL("injection_script.js"), true)
+	xhr.send()
+},
+refreshInjectionScript = () => {
+	Object.values(onBeforeRequest_rules).forEach(func => brws.webRequest.onBeforeRequest.removeListener(func))
+	Object.values(onBeforeSendHeaders_rules).forEach(func => brws.webRequest.onBeforeSendHeaders.removeListener(func))
+	Object.values(onHeadersReceived_rules).forEach(func => brws.webRequest.onHeadersReceived.removeListener(func))
+	if(enabled)
+	{
+		injectionScript = (upstreamInjectionScript + "\n" + userScript)
+		.split("UNIVERSAL_BYPASS_INTERNAL_VERSION").join("8")
+		.split("UNIVERSAL_BYPASS_EXTERNAL_VERSION").join(extension_version)
+		.split("UNIVERSAL_BYPASS_INJECTION_VERSION").join(upstreamCommit?upstreamCommit.substr(0,7):"dev")
+		Object.keys(preflightRules).forEach(name=>{
+			if(name in onBeforeRequest_rules)
+			{
+				brws.webRequest.onBeforeRequest.addListener(onBeforeRequest_rules[name],{types:["main_frame"],urls:preflightRules[name]},["blocking"])
+			}
+			else if(name in onBeforeSendHeaders_rules)
+			{
+				brws.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeaders_rules[name],{types:["main_frame","xmlhttprequest"],urls:preflightRules[name]},["blocking","requestHeaders"])
+			}
+			else if(name in onHeadersReceived_rules)
+			{
+				brws.webRequest.onHeadersReceived.addListener(onHeadersReceived_rules[name],{types:["main_frame"],urls:preflightRules[name]},["blocking","responseHeaders"])
+			}
+		})
+	}
+},
+sendToOptions = data => {
+	if(optionsPort)
+	{
+		optionsPort.postMessage(data)
+	}
+}
+if(!definitions_version)
+{
+	brws.alarms.create("update-bypass-definitions", {periodInMinutes: 60})
+	brws.alarms.onAlarm.addListener(alert => {
+		console.assert(alert.name == "update-bypass-definitions")
+		updateBypassDefinitions()
+	})
+}
+
+// Messaging
 brws.runtime.onMessage.addListener((req, sender, respond) => {
 	switch(req.type)
 	{
-		case "can-run":
-		respond({
-			enabled: enabled,
-			crowdEnabled: crowdEnabled,
-			userscript: userscript
+		case "content":
+		respond({enabled, channel, crowdEnabled, injectionScript})
+		break;
+
+		case "count-it":
+		countIt()
+		break;
+
+		case "open-tab":
+		brws.tabs.create({
+			url: req.url
 		})
-		break
+		break;
+
+		case "close-tab":
+		brws.tabs.remove(sender.tab.id)
+		break;
 
 		case "crowd-contribute":
 		if(crowdEnabled)
@@ -142,156 +359,480 @@ brws.runtime.onMessage.addListener((req, sender, respond) => {
 		{
 			console.warn("Unexpected message:", req)
 		}
-		break
+		break;
 
 		default:
 		console.warn("Invalid message:", req)
 	}
 })
 brws.runtime.onConnect.addListener(port => {
-	console.assert(port.name == "adlinkfly-info")
-	port.onMessage.addListener(msg => {
-		let xhr=new XMLHttpRequest(),t="",iu=msg
-		xhr.onload=()=>{
-			let i=new DOMParser().parseFromString(xhr.responseText,"text/html").querySelector("img[src^='//api.miniature.io']")
-			if(i)
+	switch(port.name)
+	{
+		case "options":
+		if(optionsTab)
+		{
+			optionsPort.disconnect()
+			brws.tabs.remove(optionsTab)
+		}
+		optionsTab=port.sender.tab.id
+		optionsPort=port
+		port.onDisconnect.addListener(()=>{
+			optionsTab=undefined
+			optionsPort=undefined
+		})
+		port.onMessage.addListener(req=>{
+			switch(req.type)
 			{
-				let url=new URL(i.src)
-				if(url.search&&url.search.indexOf("url="))
+				case "update":
+				updateBypassDefinitions(updateSuccess => port.postMessage({updateSuccess}))
+				break;
+			}
+		})
+		port.postMessage({updateStatus, upstreamCommit, bypassCounter, userScript, extension_version, amo: !!definitions_version})
+		break;
+
+		case "crowd-query":
+		port.onMessage.addListener(msg=>{
+			let xhr=new XMLHttpRequest()
+			xhr.onreadystatechange=()=>{
+				if(xhr.readyState==4)
 				{
-					t=decodeURIComponent(url.search.split("url=")[1].split("&")[0])
+					port.postMessage(xhr.status==200&&xhr.responseText!=""?xhr.responseText:"")
 				}
 			}
-			port.postMessage(t)
-		}
-		xhr.onerror=()=>port.postMessage(t)
-		if(iu.substr(iu.length - 1) != "/")
-		{
-			iu += "/"
-		}
-		xhr.open("GET", iu+"info", true)
-		xhr.send()
-	})
+			xhr.open("POST","https://universal-bypass.org/crowd/query_v1",true)
+			xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded")
+			xhr.send("domain="+encodeURIComponent(msg.domain)+"&path="+encodeURIComponent(msg.crowdPath))
+		})
+		break;
+
+		case "adlinkfly-info":
+		port.onMessage.addListener(msg=>{
+			let xhr=new XMLHttpRequest(),t="",iu=msg
+			xhr.onload=()=>{
+				let i=new DOMParser().parseFromString(xhr.responseText,"text/html").querySelector("img[src^='//api.miniature.io']")
+				if(i)
+				{
+					let url=new URL(i.src)
+					if(url.search&&url.search.indexOf("url="))
+					{
+						t=decodeURIComponent(url.search.split("url=")[1].split("&")[0])
+					}
+				}
+				port.postMessage(t)
+			}
+			xhr.onerror=()=>port.postMessage(t)
+			if(iu.substr(-1) != "/")
+			{
+				iu += "/"
+			}
+			xhr.open("GET", iu+"info", true)
+			xhr.send()
+		})
+		break;
+
+		default:
+		console.warn("Invalid connection:", port)
+	}
 })
 
-//Internal redirects to extension URLs to bypass content script limitations
+// Internal redirects to extension URLs to bypass content script limitations
 brws.webRequest.onBeforeRequest.addListener(details=>{
-	if(details.url.substr(38)=="1")
+	return {redirectUrl:brws.runtime.getURL("html/noscript.html")}
+},{types:["main_frame"],urls:["*://universal-bypass.org/firstrun?0"]},["blocking"])
+brws.webRequest.onBeforeRequest.addListener(details=>{
+	return {redirectUrl:brws.runtime.getURL("html/options.html#firstrun")}
+},{types:["main_frame"],urls:["*://universal-bypass.org/firstrun?1"]},["blocking"])
+
+brws.webRequest.onBeforeRequest.addListener(details=>{
+	let arr=details.url.substr(45).split("&referer="),url=arr[0],safe_in
+	arr=arr[1].split("&safe_in=")
+	if(arr.length>1)
 	{
-		return {redirectUrl:brws.runtime.getURL("html/firstrun.html")}
+		safe_in=arr[1]
 	}
-	else
-	{
-		return {redirectUrl:brws.runtime.getURL("html/firstrun-noscript.html")}
-	}
-},{types:["main_frame"],urls:["https://universal-bypass.org/firstrun?*"]},["blocking"])
+	return encodedRedirect(url,decodeURIComponent(arr[0]),safe_in)
+},{types:["main_frame"],urls:["*://universal-bypass.org/bypassed?target=*&referer=*"]},["blocking"])
+
 brws.webRequest.onBeforeRequest.addListener(details=>{
-	return encodedRedirect(details.url.substr(52))
-},{types:["main_frame"],urls:["https://universal-bypass.org/before-navigate?target=*"]},["blocking"])
-brws.webRequest.onBeforeRequest.addListener(details=>{
+	countIt()
 	return {redirectUrl:brws.runtime.getURL("html/crowd-bypassed.html")+details.url.substr(43)}
 },{types:["main_frame"],urls:["https://universal-bypass.org/crowd-bypassed?*"]},["blocking"])
 
-//Preflight Bypasses
 brws.webRequest.onBeforeRequest.addListener(details=>{
-	if(enabled)
-	{
-		return getRedirect(details.url.substr(details.url.indexOf("url=")+4))
-	}
-},{types:["main_frame"],urls:[
-"*://*/st?api=*&url=*",
-"*://*.zxro.com/u/*?url=*",
-"*://*.leechall.com/redirect.php?url=*"
-]},["blocking"])
+	return {redirectUrl:brws.runtime.getURL("html/options.html")+details.url.substr(36)}
+},{types:["main_frame"],urls:["https://universal-bypass.org/options*"]},["blocking"])
 
+// Navigation handling including presenting referer header to destinations
+var refererCache={}
 brws.webRequest.onBeforeRequest.addListener(details=>{
-	if(enabled)
+	let arr=details.url.substr(45).split("&referer=")
+	arr[0]=(new URL(decodeURIComponent(arr[0]))).toString()
+	if(arr.length>1)
 	{
-		let url=new URL(details.url)
-		if(url.searchParams.has("url"))
+		refererCache[arr[0]]=decodeURIComponent(arr[1].split("&")[0])
+	}
+	return {redirectUrl:arr[0]}
+},{types:["main_frame"],urls:["*://universal-bypass.org/navigate?target=*"]},["blocking"])
+
+let infoSpec=["blocking","requestHeaders"]
+if("EXTRA_HEADERS" in brws.webRequest.OnBeforeSendHeadersOptions)
+{
+	infoSpec.push("extraHeaders")
+}
+brws.webRequest.onBeforeSendHeaders.addListener(details=>{
+	if(enabled&&details.url in refererCache)
+	{
+		details.requestHeaders.push({
+			name: "Referer",
+			value: refererCache[details.url]
+		})
+		return {requestHeaders: details.requestHeaders}
+	}
+},{types:["main_frame"],urls:["<all_urls>"]},infoSpec)
+
+brws.webRequest.onBeforeRedirect.addListener(details=>{
+	if(enabled&&details.url in refererCache)
+	{
+		if(details.redirectUrl == details.url + "/")
 		{
-			return getRedirect(url.searchParams.get("url"))
+			refererCache[details.redirectUrl] = refererCache[details.url]
+		}
+		delete refererCache[details.url]
+	}
+},{types:["main_frame"],urls:["<all_urls>"]})
+
+brws.webRequest.onCompleted.addListener(details=>{
+	if(enabled&&details.url in refererCache)
+	{
+		delete refererCache[details.url]
+	}
+},{types:["main_frame"],urls:["<all_urls>"]})
+
+// Preflight Bypasses including Tracker Bypass using Apimon.de
+function resolveRedirect(url)
+{
+	let xhr=new XMLHttpRequest(),destination
+	xhr.onload=()=>{
+		let json=JSON.parse(xhr.responseText)
+		if(json&&json.destination)
+		{
+			destination=json.destination
 		}
 	}
-},{types:["main_frame"],urls:[
-"*://*.news-gg.com/l/?*",
-"*://*.mobile01.com/redirect.php?*",
-"*://ref.gamer.com.tw/redir.php?*"
-]},["blocking"])
-
-
-brws.webRequest.onBeforeRequest.addListener(details=>{
-	if(enabled)
-	{
+	xhr.open("GET","https://apimon.de/redirect/"+encodeURIComponent(url),false)
+	xhr.send()
+	return destination
+}
+const onBeforeRequest_rules = {
+	path_base64: details => getRedirect(atob(details.url.substr(details.url.indexOf("aHR0c")))),
+	path_s_encoded: details => encodedRedirect(details.url.substr(details.url.indexOf("/s/")+3)),
+	path_dl_base64: details => getRedirect(atob(details.url.substr(details.url.indexOf("/dl/")+4))),
+	path_u_id_base64: details => {
+		let data=details.url.substr(details.url.indexOf("/u/")+3)
+		return getRedirect(atob(data.substr(data.indexOf("/")+1)))
+	},
+	query_raw: details => {
 		let url=new URL(details.url)
 		if(url.search)
 		{
 			return getRedirect(url.search.substr(1)+url.hash)
 		}
+	},
+	query_base64: details => getRedirect(atob((new URL(details.url)).search.replace("?",""))),
+	hash_base64: details => {
+		let url=new URL(details.url)
+		if(url.hash)
+		{
+			return getRedirect(atob(url.hash.replace("#","")))
+		}
+	},
+	param_url_general: details => {
+		let url=details.url.substr(details.url.indexOf("&url=")+5)
+		if(url.substr(0,5)=="aHR0c"||url.substr(0,7)=="bWFnbmV")
+		{
+			url=atob(url.split("&")[0])
+		}
+		else if(url.substr(0,13)=="http%3A%2F%2F"||url.substr(0,14)=="https%3A%2F%2F")
+		{
+			url=decodeURIComponent(url.split("&")[0])
+		}
+		else
+		{
+			if(url.substr(0,7)!="http://"&&url.substr(0,8)!="https://")
+			{
+				url="http://"+url
+			}
+			url+=(new URL(details.url)).hash
+		}
+		return getRedirect(url,details.url)
+	},
+	param_url_encoded: details => {
+		let url=new URL(details.url)
+		if(url.searchParams.has("url"))
+		{
+			return getRedirect(url.searchParams.get("url"))
+		}
+	},
+	param_xurl_raw_http: details => getRedirect("http"+details.url.substr(details.url.indexOf("?xurl=")+6)),
+	param_aurl_encoded: details => {
+		let url=new URL(details.url)
+		if(url.searchParams.has("aurl"))
+		{
+			return getRedirect(url.searchParams.get("aurl"))
+		}
+	},
+	param_capital_url_encoded: details => {
+		let url=new URL(details.url)
+		if(url.searchParams.has("URL"))
+		{
+			return getRedirect(url.searchParams.get("URL"))
+		}
+	},
+	param_rel_base64: details => getRedirect(atob(details.url.substr(details.url.indexOf("?rel=")+5))),
+	param_link_encoded: details => encodedRedirect(details.url.substr(details.url.indexOf("link=")+5)),
+	param_link_base64: details => {
+		let url=new URL(details.url)
+		if(url.searchParams.has("link"))
+		{
+			return getRedirect(atob(url.searchParams.get("link")))
+		}
+	},
+	param_link_encoded_base64: details => getRedirect(decodeURIComponent(atob(details.url.substr(details.url.indexOf("?link=")+6)))),
+	param_kesehatan_base64: details => getRedirect(atob(details.url.substr(details.url.indexOf("?kesehatan=")+11))),
+	param_wildcard_base64: details => getRedirect(atob(new URL(details.url).searchParams.values().next().value)),
+	param_r_base64: details => {
+		let id=new URL(details.url).pathname.split("/")[1],safe_in
+		for(let i in preflightRules.linkvertise_safe_in)
+		{
+			if(id==i)
+			{
+				safe_in=preflightRules.linkvertise_safe_in[i]
+				break
+			}
+		}
+		return getRedirect(atob(decodeURIComponent(details.url.substr(details.url.indexOf("?r=")+3))),0,safe_in)
+	},
+	param_kareeI_base64_pipes: details => getRedirect(atob(details.url.substr(details.url.indexOf("?kareeI=")+8)).split("||")[0]),
+	param_cr_base64: details => {
+		let i=details.url.indexOf("cr=")
+		if(i>0)
+		{
+			return getRedirect(atob(details.url.substr(i+3).split("&")[0]))
+		}
+	},
+	param_a_base64: details => getRedirect(atob(details.url.substr(details.url.indexOf("?a=")+3).split("#",1)[0])),
+	param_url_base64: details => {
+		let i=details.url.indexOf("?url=")
+		if(i>0)
+		{
+			return getRedirect(atob(details.url.substr(i+5).split("&")[0]))
+		}
+	},
+	param_id_base64: details => getRedirect(atob(details.url.substr(details.url.indexOf("?id=")+4))),
+	param_get_base64: details => {
+		let arg=details.url.substr(details.url.indexOf("?get=")+5)
+		return getRedirect(atob(arg.substr(0,arg.length-1)))
+	},
+	param_u_base64: details => {
+		let url=new URL(details.url)
+		if(url.searchParams.has("u"))
+		{
+			return getRedirect(atob(url.searchParams.get("u"))+url.hash)
+		}
+	},
+	param_go_base64: details => {
+		let b64=details.url.substr(details.url.indexOf("?go=")+4).split("&")[0]
+		if(b64.substr(0,5)=="0OoL1")
+		{
+			b64="aHR0c"+b64.substr(5)
+		}
+		return getRedirect(atob(b64))
+	},
+	param_site_base64: details => getRedirect(atob(details.url.substr(details.url.indexOf("?site=")+6).split("&")[0])),
+	param_reff_base64: details => getRedirect(atob(details.url.substr(details.url.indexOf("?reff=")+6))),
+	param_s_encoded: details => encodedRedirect(details.url.substr(details.url.indexOf("?s=")+3),details.url),
+	param_dl_encoded_base64: details => encodedRedirect(atob(details.url.substr(details.url.indexOf("?dl=")+4).split("&")[0])),
+	param_health_encoded_base64: details => encodedRedirect(atob(details.url.substr(details.url.indexOf("?health=")+8))),
+	param_id_reverse_base64: details => {
+		let url=new URL(details.url)
+		if(url.searchParams.has("id"))
+		{
+			let t=atob(url.searchParams.get("id").split("").reverse().join(""))
+			if(t.substr(-16)=='" target="_blank')
+			{
+				t=t.substr(0,t.length-16)
+			}
+			return getRedirect(t)
+		}
+	},
+	param_token_base64: details => {
+		let url=new URL(details.url)
+		if(url.searchParams.has("token"))
+		{
+			return getRedirect(atob(url.searchParams.get("token")))
+		}
+	},
+	param_href_encoded: details => {
+		let url=new URL(details.url)
+		if(url.searchParams.has("href"))
+		{
+			return getRedirect(url.searchParams.get("href"))
+		}
+	},
+	param_short_encoded: details => {
+		let url=new URL(details.url)
+		if(url.searchParams.has("short"))
+		{
+			return getRedirect(url.searchParams.get("short"))
+		}
+	},
+	param_id_base64_replacements: details => {
+		let url=new URL(details.url)
+		if(url.searchParams.has("id"))
+		{
+			return getRedirect(atob(url.searchParams.get("id")).split("!").join("a").split(")").join("e").split("_").join("i").split("(").join("o").split("*").join("u"))
+		}
+	},
+	param_dest_encoded: details => {
+		let url=new URL(details.url)
+		if(url.searchParams.has("dest"))
+		{
+			return getRedirect(url.searchParams.get("dest"))
+		}
+	},
+	param_go_hex: details => {
+		let url=new URL(details.url)
+		if(url.searchParams.has("go"))
+		{
+			let go=url.searchParams.get("go"),a=[]
+			for(let i=0;i<go.length-1;i+=2)
+			{
+				a.push(parseInt(go.substr(i,2),16))
+			}
+			return getRedirect(String.fromCharCode.apply(String,a))
+		}
+	},
+	param_to_base64: details => {
+		let url=new URL(details.url)
+		if(url.searchParams.has("to"))
+		{
+			return getRedirect(atob(url.searchParams.get("to")))
+		}
+	},
+	tracker: details => {
+		if(trackerBypassEnabled&&new URL(details.url).pathname!="/")
+		{
+			let destination=resolveRedirect(details.url)
+			if(destination&&destination!=details.url)
+			{
+				return getRedirect(destination,"tracker")
+			}
+		}
+	},
+	ip_logger: details => {
+		if(new URL(details.url).pathname!="/")
+		{
+			if(trackerBypassEnabled)
+			{
+				let destination=resolveRedirect(details.url)
+				if(destination&&destination!=details.url)
+				{
+					return getRedirect(destination,"tracker")
+				}
+			}
+			if(blockIPLoggers)
+			{
+				return {redirectUrl:brws.runtime.getURL("html/blocked.html")}
+			}
+		}
 	}
-},{types:["main_frame"],urls:["*://*.anonym.to/?*"]},["blocking"])
+},
+onBeforeSendHeaders_rules = {
+	useragent_googlebot: details => {
+		details.requestHeaders.push({
+			name: "User-Agent",
+			value: "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+		})
+		return {requestHeaders: details.requestHeaders}
+	},
+	useragent_iphone: details => {
+		details.requestHeaders.push({
+			name: "User-Agent",
+			value: "Mozilla/5.0 (iPhone; CPU iPhone OS 13_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1"
+		})
+		return {requestHeaders: details.requestHeaders}
+	}
+},
+onHeadersReceived_rules = {
+	redirect_persist_id_path: details => {
+		let url = new URL(details.url)
+		if(url.pathname.substr(0,6)!="/post/")
+		{
+			for(let i in details.responseHeaders)
+			{
+				let header = details.responseHeaders[i]
+				if(header.name.toLowerCase() == "location")
+				{
+					details.responseHeaders[i].value += "#" + url.pathname.substr(1)
+					break
+				}
+			}
+		}
+		return {responseHeaders: details.responseHeaders}
+	},
+	redirect_persist_id_path_1_letter: details => {
+		let url = new URL(details.url)
+		for(let i in details.responseHeaders)
+		{
+			let header = details.responseHeaders[i]
+			if(header.name.toLowerCase() == "location")
+			{
+				details.responseHeaders[i].value += "#" + url.pathname.substr(3).split("/")[0]
+				break
+			}
+		}
+		return {responseHeaders: details.responseHeaders}
+	},
+	contribute_hash: details => {
+		if(crowdEnabled&&details.method=="POST")
+		{
+			let url=new URL(details.url)
+			if(url.hash.length>1)
+			{
+				for(let i in details.responseHeaders)
+				{
+					let header=details.responseHeaders[i]
+					if(header.name.toLowerCase()=="location"&&isGoodLink(header.value))
+					{
+						let xhr=new XMLHttpRequest()
+						xhr.open("POST","https://universal-bypass.org/crowd/contribute_v1",true)
+						xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded")
+						xhr.send("domain="+url.host+"&path="+encodeURIComponent(url.hash.substr(1))+"&target="+encodeURIComponent(header.value))
+						break
+					}
+				}
+			}
+		}
+	}
+}
 
-brws.webRequest.onBeforeRequest.addListener(details=>{
-	if(enabled)
+brws.storage.local.get(["userscript","bypass_counter"],res=>{
+	if(res)
 	{
-		return getRedirect(atob(details.url.substr(details.url.indexOf("?rel=")+5)))
+		if(res.userscript)
+		{
+			userScript=res.userscript
+		}
+		if(res.bypass_counter)
+		{
+			bypassCounter=res.bypass_counter
+		}
 	}
-},{types:["main_frame"],urls:["*://*.kharismanews.com/?rel=*"]},["blocking"])
+	updateBypassDefinitions()
+})
 
-brws.webRequest.onBeforeRequest.addListener(details=>{
-	if(enabled)
-	{
-		return encodedRedirect(details.url.substr(details.url.indexOf("link=")+5))
-	}
-},{types:["main_frame"],urls:["*://*.spaste.com/r/*link=*",]},["blocking"])
-
-brws.webRequest.onBeforeRequest.addListener(details=>{
-	if(enabled)
-	{
-		return getRedirect(atob(details.url.substr(details.url.indexOf("?link=")+6)))
-	}
-},{types:["main_frame"],urls:["*://*.leechpremium.link/cheat/?link=*"]},["blocking"])
-
-brws.webRequest.onBeforeRequest.addListener(details=>{
-	if(enabled)
-	{
-		return getRedirect(atob(details.url.substr(details.url.indexOf("?kesehatan=")+11)))
-	}
-},{types:["main_frame"],urls:["*://*.infosia.xyz/?kesehatan=*"]},["blocking"])
-
-brws.webRequest.onBeforeRequest.addListener(details=>{
-	if(enabled)
-	{
-		return getRedirect(atob(new URL(details.url).searchParams.values().next().value))
-	}
-},{types:["main_frame"],urls:[
-"*://*.pafpaf.info/?*=*",
-"*://*.binerfile.info/?*=*",
-"*://kurosafety.menantisenja.com/?*=*"
-]},["blocking"])
-
-brws.webRequest.onBeforeRequest.addListener(details=>{
-	if(enabled)
-	{
-		return getRedirect(atob(details.url.substr(details.url.indexOf("?r=")+3)))
-	}
-},{types:["main_frame"],urls:[
-"*://*.yumechan.club/?r=*",
-"*://*.celeclub.org/?r=*",
-"*://*.duniaislamku.com/?r=*"
-]},["blocking"])
-
-brws.webRequest.onBeforeRequest.addListener(details=>{
-	if(enabled)
-	{
-		return encodedRedirect(details.url.substr(details.url.indexOf("?s=")+3))
-	}
-},{types:["main_frame"],urls:[
-"*://*.ouo.io/s/*?s=*",
-"*://*.ouo.io/qs/*?s=*",
-"*://*.cpmlink.net/s/*?s=*"
-]},["blocking"])
-
+// Very Specific Preflight Bypasses
 brws.webRequest.onBeforeRequest.addListener(details=>{
 	if(enabled)
 	{
@@ -302,9 +843,9 @@ brws.webRequest.onBeforeRequest.addListener(details=>{
 brws.webRequest.onBeforeRequest.addListener(details=>{
 	if(enabled)
 	{
-		return encodedRedirect(details.url.substr(details.url.indexOf("/s/")+3))
+		return getRedirect(details.url.substr(details.url.substr(16).indexOf("/")+17))
 	}
-},{types:["main_frame"],urls:["*://*.gslink.co/e/*/s/*"]},["blocking"])
+},{types:["main_frame"],urls:["http://sh.st/st/*/*"]},["blocking"])
 
 brws.webRequest.onBeforeRequest.addListener(details=>{
 	if(enabled)
@@ -320,41 +861,12 @@ brws.webRequest.onBeforeRequest.addListener(details=>{
 			url=atob(arr[1])
 		}
 		while(url.length>=19&&url.substr(0,19)=="http://gslink.co/a/");
-		if(url!=details.url&&isGoodLink(url))
+		if(url!=details.url)
 		{
 			return getRedirect(url)
 		}
 	}
 },{types:["main_frame"],urls:["http://gslink.co/a/*"]},["blocking"])
-
-brws.webRequest.onBeforeRequest.addListener(details=>{
-	if(enabled)
-	{
-		let url=new URL(details.url)
-		if(url.searchParams.has("u"))
-		{
-			return getRedirect(atob(url.searchParams.get("u"))+url.hash)
-		}
-	}
-},{types:["main_frame"],urls:["*://*.noriskdomain.com/*/analyze?*"]},["blocking"])
-
-brws.webRequest.onBeforeRequest.addListener(details=>{
-	if(enabled)
-	{
-		return getRedirect(atob(details.url.substr(details.url.indexOf("/dl/")+4)))
-	}
-},{types:["main_frame"],urls:["*://*.k2nblog.com/dl/*"]},["blocking"])
-
-brws.webRequest.onBeforeRequest.addListener(details=>{
-	if(enabled)
-	{
-		let url=new URL(details.url)
-		if(url.searchParams.has("id"))
-		{
-			return getRedirect(atob(url.searchParams.get("id").split("").reverse().join("")))
-		}
-	}
-},{types:["main_frame"],urls:["*://*.masterads.info/instagram/campanha.php?*"]},["blocking"])
 
 brws.webRequest.onBeforeRequest.addListener(details=>{
 	if(enabled)
@@ -367,79 +879,72 @@ brws.webRequest.onBeforeRequest.addListener(details=>{
 	}
 },{types:["main_frame"],urls:["*://*.surfsees.com/?*"]},["blocking"])
 
-brws.webRequest.onBeforeRequest.addListener(details=>{
-	if(enabled)
-	{
-		let url=new URL(details.url)
-		if(url.searchParams.has("href"))
-		{
-			return getRedirect(url.searchParams.get("href"))
-		}
-	}
-},{types:["main_frame"],urls:["*://*.maranhesduve.club/?*"]},["blocking"])
-
-brws.webRequest.onBeforeRequest.addListener(details=>{
-	if(enabled)
-	{
-		let url=new URL(details.url)
-		if(url.searchParams.has("id"))
-		{
-			return getRedirect(atob(url.searchParams.get("id")).split("!").join("a").split(")").join("e").split("_").join("i").split("(").join("o").split("*").join("u"))
-		}
-	}
-},{types:["main_frame"],urls:[
-"*://*.safelinkconverter.com/*?*",
-"*://*.safelinkreview.com/*?*",
-"*://*.safelinkreviewx.com/*?*",
-"*://*.safelinkreview.co/*?*",
-"*://*.awsubsco.ml/*?*",
-"*://*.awsubsco.cf/*?*"
-]},["blocking"])
-
-brws.webRequest.onBeforeRequest.addListener(details=>{
-	if(enabled)
-	{
-		let url=new URL(details.url)
-		if(url.searchParams.has("dest"))
-		{
-			return getRedirect(url.searchParams.get("dest"))
-		}
-	}
-},{types:["main_frame"],urls:["*://*.ecleneue.com/pushredirect/?*"]},["blocking"])
-
-//Ouo.io/press Crowd Bypass
+// Ouo.io/press & lnk2.cc Crowd Bypass
 brws.webRequest.onHeadersReceived.addListener(details=>{
-	if(enabled)
+	if(enabled&&crowdEnabled)
 	{
-		let url = new URL(details.url), target
+		let url=new URL(details.url)
 		for(let i in details.responseHeaders)
 		{
-			let header = details.responseHeaders[i]
-			if(header.name.toLowerCase() == "location" && isGoodLink(header.value))
+			let header=details.responseHeaders[i]
+			if(header.name.toLowerCase()=="location"&&isGoodLink(header.value))
 			{
-				details.responseHeaders[i].value = getRedirectUrl(target = header.value)
+				let xhr=new XMLHttpRequest(),
+				domain=url.hostname
+				if(domain=="ouo.press")
+				{
+					domain="ouo.io"
+				}
+				xhr.open("POST","https://universal-bypass.org/crowd/contribute_v1",true)
+				xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded")
+				xhr.send("domain="+domain+"&path="+encodeURIComponent(url.pathname.split("/")[2])+"&target="+encodeURIComponent(header.value))
 				break
 			}
-		}
-		if(target)
-		{
-			let xhr=new XMLHttpRequest()
-			xhr.open("POST","https://universal-bypass.org/crowd/contribute_v1",true)
-			xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded")
-			xhr.send("domain=ouo.io&path="+encodeURIComponent(url.pathname.split("/")[2])+"&target="+encodeURIComponent(target))
-			return{responseHeaders:details.responseHeaders}
 		}
 	}
 },{types:["main_frame"],urls:[
 "*://*.ouo.io/*/*",
-"*://*.ouo.press/*/*"
+"*://*.ouo.press/*/*",
+"*://*.lnk2.cc/*/*"
 ]},["blocking","responseHeaders"])
 
-//Fixing Content-Security-Policy on Firefox because apparently extensions have no special privileges in Firefox
-if(platform=="moz")
-{
-	brws.webRequest.onHeadersReceived.addListener(details=>{
-		if(enabled)
+// SoraLink Crowd Bypass
+let soralink_contribute={}
+brws.webRequest.onBeforeRequest.addListener(details=>{
+	if(enabled)
+	{
+		const arg_index=details.url.indexOf("&soralink_contribute="),url=details.url.substr(0,arg_index)
+		if(crowdEnabled)
+		{
+			soralink_contribute[url]=details.url.substr(arg_index+21)
+		}
+		return{redirectUrl:url}
+	}
+},{types:["main_frame"],urls:["*://*/?*=*&soralink_contribute=*"]},["blocking"])
+
+brws.webRequest.onHeadersReceived.addListener(details=>{
+	if(enabled)
+	{
+		if(crowdEnabled && details.url in soralink_contribute)
+		{
+			if(details.method=="POST")
+			{
+				for(let i in details.responseHeaders)
+				{
+					let header=details.responseHeaders[i]
+					if(header.name.toLowerCase()=="location"&&isGoodLink(header.value))
+					{
+						let xhr=new XMLHttpRequest()
+						xhr.open("POST","https://universal-bypass.org/crowd/contribute_v1",true)
+						xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded")
+						xhr.send("domain="+(new URL(details.url)).host+"&path="+encodeURIComponent(soralink_contribute[details.url])+"&target="+encodeURIComponent(header.value))
+						break
+					}
+				}
+			}
+			delete soralink_contribute[details.url]
+		}
+		if(firefox)//Fixing Content-Security-Policy on Firefox because apparently extensions have no special privileges there
 		{
 			let csp = false
 			for(let i in details.responseHeaders)
@@ -469,10 +974,6 @@ if(platform=="moz")
 						{
 							policies["script-src"].push("'unsafe-inline'")
 						}
-						if(policies["script-src"].indexOf("'unsafe-eval'")==-1)
-						{
-							policies["script-src"].push("'unsafe-eval'")
-						}
 					}
 					else
 					{
@@ -496,183 +997,5 @@ if(platform=="moz")
 				return{responseHeaders:details.responseHeaders}
 			}
 		}
-	},{types:["main_frame"],urls:["<all_urls>"]},["blocking","responseHeaders"])
-}
-
-//Tracker Bypass using Apimon.de
-function resolveRedirect(url)
-{
-	let xhr=new XMLHttpRequest(),destination
-	xhr.onload=()=>{
-		let json=JSON.parse(xhr.responseText)
-		if(json&&json.destination)
-			destination=json.destination
 	}
-	xhr.open("GET","https://apimon.de/redirect/"+encodeURIComponent(url),false)
-	xhr.send()
-	return destination
-}
-brws.webRequest.onBeforeRequest.addListener(details=>{
-	if(trackerBypassEnabled&&new URL(details.url).pathname!="/")
-	{
-		let destination=resolveRedirect(details.url)
-		if(destination&&destination!=details.url)
-		{
-			return getRedirect(destination,true)
-		}
-	}
-},{
-	types:["main_frame"],
-	urls:[
-	"*://*.great.social/*",
-	"*://*.send.digital/*",
-	"*://*.snipli.com/*",
-	"*://*.shortcm.li/*",
-	"*://*.page.link/*",
-	"*://*.go2l.ink/*",
-	"*://*.buff.ly/*",
-	"*://*.snip.li/*",
-	"*://*.hive.am/*",
-	"*://*.cutt.ly/*",
-	"*://*.tiny.ie/*",
-	"*://*.bit.ly/*",
-	"*://*.goo.gl/*",
-	"*://*.bit.do/*",
-	"*://*.t2m.io/*",
-	"*://*.dis.gd/*",
-	"*://*.zii.bz/*",
-	"*://*.plu.sh/*",
-	"*://*.b.link/*",
-	"*://*.po.st/*",
-	"*://*.ow.ly/*",
-	"*://*.is.gd/*",
-	"*://*.1b.yt/*",
-	"*://*.1w.tf/*",
-	"*://*.t.co/*",
-	"*://*.x.co/*"
-	]
-},["blocking"])
-brws.webRequest.onBeforeRequest.addListener(details=>{
-	if(new URL(details.url).pathname!="/")
-	{
-		if(trackerBypassEnabled)
-		{
-			let destination=resolveRedirect(details.url)
-			if(destination&&destination!=details.url)
-			{
-				return getRedirect(destination,true)
-			}
-		}
-		if(blockIPLoggers)
-		{
-			return {redirectUrl:brws.runtime.getURL("html/blocked.html")}
-		}
-	}
-},{types:["main_frame"],urls:getIPLoggerPatterns()},["blocking"])
-function getIPLoggerPatterns()
-{
-	let patterns=[],
-	//https://github.com/timmyrs/Evil-Domains/blob/master/lists/IP%20Loggers.txt
-	ipLoggers=`viral.over-blog.com
-	gyazo.in
-	ps3cfw.com
-	urlz.fr
-	webpanel.space
-	steamcommumity.com
-	i.imgur.com.de
-	www.fuglekos.com
-
-	# Grabify
-
-	grabify.link
-	bmwforum.co
-	leancoding.co
-	quickmessage.io
-	spottyfly.com
-	spötify.com
-	stopify.co
-	yoütu.be
-	yoütübe.co
-	yoütübe.com
-	xda-developers.io
-	starbucksiswrong.com
-	starbucksisbadforyou.com
-	bucks.as
-	discörd.com
-	minecräft.com
-	cyberh1.xyz
-	discördapp.com
-	freegiftcards.co
-	disçordapp.com
-	rëddït.com
-
-	# Cyberhub (formerly SkypeGrab)
-
-	ġooģle.com
-	drive.ġooģle.com
-	maps.ġooģle.com
-	disċordapp.com
-	ìṃgur.com
-	transferfiles.cloud
-	tvshare.co
-	publicwiki.me
-	hbotv.co
-	gameskeys.shop
-	videoblog.tech
-	twitch-stats.stream
-	anonfiles.download
-	bbcbloggers.co.uk
-
-	# Yip
-
-	yip.su
-	iplogger.com
-	iplogger.org
-	iplogger.ru
-	2no.co
-	02ip.ru
-	iplis.ru
-	iplo.ru
-	ezstat.ru
-
-	# What's their IP
-
-	www.whatstheirip.com
-	www.hondachat.com
-	www.bvog.com
-	www.youramonkey.com
-
-	# Pronosparadise
-
-	pronosparadise.com
-	freebooter.pro
-
-	# Blasze
-
-	blasze.com
-	blasze.tk
-
-	# IPGrab
-
-	ipgrab.org
-	i.gyazos.com`,
-	lines=ipLoggers.split("\n")
-	for(let i in lines)
-	{
-		let line=lines[i].trim()
-		if(line&&line.substr(0,1)!="#")
-		{
-			if(line.substr(0,4)=="www.")
-				line=line.substr(4)
-			else if(line.substr(0,2)=="i.")
-				line=line.substr(2)
-			else if(line.substr(0,6)=="drive.")
-				line=line.substr(6)
-			else if(line.substr(0,5)=="maps.")
-				line=line.substr(5)
-			if(patterns.indexOf(line)==-1)
-				patterns.push("*://*."+line+"/*")
-		}
-	}
-	return patterns
-}
+},{types:["main_frame"],urls:["<all_urls>"]},["blocking","responseHeaders"])

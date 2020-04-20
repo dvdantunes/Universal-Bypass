@@ -5,14 +5,23 @@
 	"firstrunTitle": {
 		"message": "Gràcies per instal·lar Universal Bypass!"
 	},
-	"firstrunSubtitle": {
-		"message": "Ets fantàstic!"
-	},
 	"firstrunNoScript": {
 		"message": "Però, sembla que estàs utilitzant NoScript o similar, amb la qual Universal Bypass no és compatible."
 	},
-	"optionsTrackerBypass": {
-		"message": "Circumval·la rastrejadors utilitzant Apimon.de."
+	"faq": {
+		"message": "Preguntes més freqüents (FAQ)"
+	},
+	"options": {
+		"message": "Opcions"
+	},
+	"optionsLink": {
+		"message": "Canvia les opcions de Universal Bypass."
+	},
+	"optionsEnabled": {
+		"message": "Activa omissió de pàgines web."
+	},
+	"optionsInstantNavigationTrackers": {
+		"message": "Porta'm instantàniament a les destinacions dels seguidors."
 	},
 	"optionsBlockIPLoggers": {
 		"message": "Bloqueja registradors d'adreces IP si no poden circumval·lar-se."
@@ -26,9 +35,6 @@
 	"optionsUserscripts": {
 		"message": "Circumval·lacions personalitzades"
 	},
-	"blockedTitle": {
-		"message": "Universal Bypass ha impedit que la seva adreça IP es registrés."
-	},
 	"crowdBypassed": {
 		"message": "Potser que no hagis d'esperar!"
 	},
@@ -37,5 +43,8 @@
 	},
 	"crowdBypassedIgnore": {
 		"message": "Això no era correcte?"
+	},
+	"blockedTitle": {
+		"message": "Universal Bypass ha impedit que la seva adreça IP es registrés."
 	}
 }

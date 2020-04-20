@@ -5,14 +5,38 @@
 	"firstrunTitle": {
 		"message": "Благодарим ви за инсталирането на Universal Bypass!"
 	},
-	"firstrunSubtitle": {
-		"message": "Ти си невероятен!"
-	},
 	"firstrunNoScript": {
 		"message": "Въпреки това изглежда, че използвате NoScript или подобен, с който Universal Bypass не е съвместим."
 	},
+	"version": {
+		"message": "Версия"
+	},
+	"definitionsVersion": {
+		"message": "Определения на байпас"
+	},
+	"changelog": {
+		"message": "Дневник на промените"
+	},
+	"update": {
+		"message": "Провери за обновления"
+	},
+	"updating": {
+		"message": "Изтеглянето на байпас дефиниции..."
+	},
+	"updateYes": {
+		"message": "Успешно инсталирахте дефиниции на байпас."
+	},
+	"updateNo": {
+		"message": "Дефиниции на байпас са актуални"
+	},
 	"faq": {
 		"message": "Често задавани въпроси (FAQ)"
+	},
+	"bypassCounter": {
+		"message": "Универсалният Байпас вече е заобиколил % сайтове за вас."
+	},
+	"support": {
+		"message": "Принос за Универсалният Байпас"
 	},
 	"options": {
 		"message": "Опции"
@@ -22,12 +46,6 @@
 	},
 	"optionsEnabled": {
 		"message": "Активирайте заобикалянето на уебсайтовете."
-	},
-	"optionsTrackerBypass": {
-		"message": "Заобиколете тракерите, използвайки Apimon.de."
-	},
-	"optionsInstantNavigation": {
-		"message": "Незабавно ме отведе до дестинации."
 	},
 	"optionsInstantNavigationTrackers": {
 		"message": "Незабавно ме отведете до дестинациите на тракерите."
@@ -44,23 +62,11 @@
 	"optionsUserscripts": {
 		"message": "Персонализирани байпаси"
 	},
-	"optionsUserscriptsSubtitle": {
-		"message": "Би било хубаво, ако можете да изпратите работещи байпаси на GitHub, за да могат другите да се възползват от тях."
-	},
 	"beforeNavigate": {
 		"message": "Почти сте на местоназначението си."
 	},
 	"beforeNavigateDestination": {
 		"message": "Вашата дестинация е %"
-	},
-	"beforeNavigateInfo": {
-		"message": "Искате ли Universal Bypass незабавно да ви пренасочи към вашата дестинация?"
-	},
-	"blockedTitle": {
-		"message": "Universal Bypass предотврати регистрирането на вашия IP адрес."
-	},
-	"blockedSubtitle": {
-		"message": "Не искате Universal Bypass да попречи на лошите хора да получат вашия IP адрес?"
 	},
 	"crowdBypassed": {
 		"message": "Може да не се наложи да чакате!"
@@ -70,5 +76,11 @@
 	},
 	"crowdBypassedIgnore": {
 		"message": "Не беше ли това правилно?"
+	},
+	"blockedTitle": {
+		"message": "Universal Bypass предотврати регистрирането на вашия IP адрес."
+	},
+	"blockedSubtitle": {
+		"message": "Не искате Universal Bypass да попречи на лошите хора да получат вашия IP адрес?"
 	}
 }
